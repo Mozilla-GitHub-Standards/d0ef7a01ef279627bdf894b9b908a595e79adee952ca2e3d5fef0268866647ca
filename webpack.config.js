@@ -29,6 +29,10 @@ module.exports = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('commons.js',
                                             ['management', 'payment']),
+    // fetch polyfill: http://mts.io/2015/04/08/webpack-shims-polyfills/
+    new webpack.ProvidePlugin({
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch',
+    }),
   ],
   resolve: {
     // you can now require('file') instead of require('file.json')

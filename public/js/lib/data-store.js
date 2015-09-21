@@ -30,8 +30,8 @@ export function createReduxStore() {
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     // See: https://github.com/rackt/react-redux/releases/tag/v2.0.0
-    module.hot.accept('reducers', () => {
-      const nextRootReducer = require('reducers');
+    module.hot.accept('lib/reducers', () => {
+      const nextRootReducer = require('lib/reducers');
       store.replaceReducer(nextRootReducer);
     });
   }
