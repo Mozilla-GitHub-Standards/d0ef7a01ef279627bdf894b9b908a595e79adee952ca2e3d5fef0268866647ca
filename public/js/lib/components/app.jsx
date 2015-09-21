@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
+import ResponseCountGraph from 'lib/components/response-count-graph';
 
 
 export class App extends Component {
@@ -24,7 +25,9 @@ export class App extends Component {
       return <Error message={this.props.app.error} />;
     } else {
       return (
-        <div>This is a rendered app</div>
+        <div>
+          <ResponseCountGraph />
+        </div>
       );
     }
   }

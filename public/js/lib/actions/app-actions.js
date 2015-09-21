@@ -1,13 +1,17 @@
 import * as actionTypes from 'lib/action-types';
+import * as graphite from 'lib/utils/graphite'
 
 
 export function checkForGraphite() {
   return (dispatch) => {
-    fetch('http://graphite.nag.mktmon.services.phx1.mozilla.com/render/?width=580&height=308&vtitle=count&target=sumSeries(stats.addons.response.*)&target=stats.addons.response.200&target=stats.addons.response.301&target=stats.addons.response.302&target=stats.addons.response.403&target=stats.addons.response.404&target=stats.addons.response.405&target=stats.addons.response.500&target=drawAsInfinite(stats.timers.addons.update.count)&from=-15minutes&title=15%20minutes&', {
-      mode: 'no-cors',
-    })
+    fetch(graphite.responseCountUrl(), {mode: 'no-cors'})
       .then(response => {
-        console.log('got graphite response; check status?');
+        console.log('got graphite response');
+        if (!response.ok && response.status > 0) {
+          // Maybe handle this better.
+          throw new Error(
+              'unexpected response status: ' + response.status)
+        }
       }, error => {
         console.log('error loading graphite graphite:', error);
         dispatch({
