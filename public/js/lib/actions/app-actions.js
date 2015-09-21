@@ -13,8 +13,8 @@ export function checkForGraphite() {
         dispatch({
           type: actionTypes.APP_ERROR,
           error: (
-            "Could not load any graphs. " +
-            "Make sure you're behind the Mozilla VPN."
+            "Hmm, the graphs wouldn't load. " +
+            "Make sure you're behind the Mozilla VPN and try again."
           ),
         });
       });
