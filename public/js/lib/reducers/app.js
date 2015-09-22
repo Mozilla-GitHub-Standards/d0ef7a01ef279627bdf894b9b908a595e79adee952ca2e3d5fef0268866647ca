@@ -3,6 +3,7 @@ import * as actionTypes from 'lib/action-types';
 
 export const initialAppState = {
   error: null,
+  panelSize: {},
 };
 
 
@@ -11,6 +12,13 @@ export default function app(state, action) {
     case actionTypes.APP_ERROR:
       return Object.assign({}, state, {
         error: action.error,
+      });
+    case actionTypes.DECLARE_PANEL_SIZE:
+      return Object.assign({}, state, {
+        panelSize: Object.assign({}, state.panelSize, {
+          width: action.width,
+          height: action.height,
+        }),
       });
     default:
       return state || initialAppState;

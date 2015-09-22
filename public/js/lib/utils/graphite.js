@@ -23,11 +23,8 @@ export function url(params) {
 }
 
 
-export function responseCountUrl({width=580, height=308,
-                                  ...params} = {}) {
+export function responseCountUrl({...params} = {}) {
   return url({
-    width: width,
-    height: height,
     vtitle: 'count',
     target: [
       'sumSeries(stats.addons.response.*)',

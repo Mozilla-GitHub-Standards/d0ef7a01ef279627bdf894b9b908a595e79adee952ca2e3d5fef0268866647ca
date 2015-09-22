@@ -1,5 +1,6 @@
 import * as actionTypes from 'lib/action-types';
 import * as graphite from 'lib/utils/graphite'
+import { gettext } from 'lib/utils';
 
 
 export function checkForGraphite() {
@@ -16,11 +17,21 @@ export function checkForGraphite() {
         console.log('error loading graphite graphite:', error);
         dispatch({
           type: actionTypes.APP_ERROR,
-          error: (
+          error: gettext(
             "Hmm, the graphs wouldn't load. " +
             "Make sure you're behind the Mozilla VPN and try again."
           ),
         });
       });
   }
+}
+
+
+export function setWindowSize({width, height}) {
+  const horizontalMargin = 40;  // matches padding from scss/_base.scss
+  return {
+    type: actionTypes.DECLARE_PANEL_SIZE,
+    width: width && width - horizontalMargin,
+    height: height,
+  };
 }

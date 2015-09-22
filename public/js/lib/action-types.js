@@ -1,1 +1,2 @@
 export const APP_ERROR = 'APP_ERROR';
+export const DECLARE_PANEL_SIZE = 'DECLARE_PANEL_SIZE';
