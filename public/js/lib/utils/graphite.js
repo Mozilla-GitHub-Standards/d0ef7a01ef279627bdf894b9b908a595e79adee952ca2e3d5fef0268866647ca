@@ -85,6 +85,24 @@ export function responseTimesUrl({...params} = {}) {
 }
 
 
+export function searchTimesUrl({...params} = {}) {
+  return url({
+    vtitle: 'milleseconds',
+    target: [
+      'stats.timers.addons.view.search.views.search.GET.lower',
+      'stats.timers.addons.search.raw.lower',
+      'stats.timers.addons.view.search.views.search.GET.mean',
+      'stats.timers.addons.search.raw.mean',
+      'stats.timers.addons.view.search.views.search.GET.upper_90',
+      'stats.timers.addons.search.raw.upper_90',
+      'scale(stats.timers.addons.view.search.views.search.GET.count,0.1)',
+      'scale(stats.timers.addons.search.raw.count,0.1)',
+    ],
+    ...params,
+  });
+}
+
+
 export function redirectsAndErrorsUrl({...params} = {}) {
   return url({
     vtitle: 'count',

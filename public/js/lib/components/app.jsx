@@ -62,6 +62,8 @@ export class App extends Component {
             getUrl={graphite.responseCountUrl} {...graphConf} />
           <Graph kind="Response Times"
             getUrl={graphite.responseTimesUrl} {...graphConf} />
+          <Graph kind="Search Times"
+            getUrl={graphite.searchTimesUrl} {...graphConf} />
           <Graph kind="Redirects and Errors"
             getUrl={graphite.redirectsAndErrorsUrl} {...graphConf} />
           <Graph kind="% of Auth'd Responses"
