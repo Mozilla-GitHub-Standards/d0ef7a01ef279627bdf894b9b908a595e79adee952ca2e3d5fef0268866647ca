@@ -58,3 +58,47 @@ export function responseCountUrl({...params} = {}) {
     ...params,
   });
 }
+
+
+export function authResponseCountUrl({...params} = {}) {
+  return url({
+    vtitle: 'scale',
+    target: [
+      'stats.addons.response.auth.200',
+      'scale(stats.addons.response.200,0.1)',
+    ],
+    ...params,
+  });
+}
+
+
+export function responseTimesUrl({...params} = {}) {
+  return url({
+    vtitle: 'milleseconds',
+    target: [
+      'stats.timers.addons.view.GET.lower',
+      'stats.timers.addons.view.GET.mean',
+      'stats.timers.addons.view.GET.upper_90',
+    ],
+    ...params,
+  });
+}
+
+
+export function redirectsAndErrorsUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: [
+      'stats.addons.response.301',
+      'stats.addons.response.302',
+      'stats.addons.response.304',
+      'stats.addons.response.400',
+      'stats.addons.response.403',
+      'stats.addons.response.404',
+      'stats.addons.response.405',
+      'stats.addons.response.500',
+      'stats.addons.response.503',
+    ],
+    ...params,
+  });
+}

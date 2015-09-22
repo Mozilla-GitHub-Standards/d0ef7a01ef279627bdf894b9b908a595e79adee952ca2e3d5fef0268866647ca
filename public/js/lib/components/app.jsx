@@ -5,11 +5,11 @@ import { debounce } from 'underscore';
 import cx from 'classnames';
 
 import { gettext } from 'lib/utils';
-import { graphTitles } from 'lib/utils/graphite';
+import * as graphite from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
 import Grid from 'lib/components/grid';
-import ResponseCountGraph from 'lib/components/response-count-graph';
+import Graph from 'lib/components/graph';
 import Spinner from 'lib/components/spinner';
 
 
@@ -64,17 +64,19 @@ export class App extends Component {
         width: graphWidth,
         height: graphHeight,
         timeSlice: this.props.app.timeSlice,
-        title: graphTitles[this.props.app.timeSlice],
       };
       var holderClass = cx('graph-holder');
 
       return (
         <Grid columns={columns}>
-          <ResponseCountGraph {...graphConf} />
-          <ResponseCountGraph {...graphConf} />
-          <ResponseCountGraph {...graphConf} />
-          <ResponseCountGraph {...graphConf} />
-          <ResponseCountGraph {...graphConf} />
+          <Graph kind="Response Count"
+            getUrl={graphite.responseCountUrl} {...graphConf} />
+          <Graph kind="Response Times"
+            getUrl={graphite.responseTimesUrl} {...graphConf} />
+          <Graph kind="Redirects and Errors"
+            getUrl={graphite.redirectsAndErrorsUrl} {...graphConf} />
+          <Graph kind="% of Auth'd Responses"
+            getUrl={graphite.authResponseCountUrl} {...graphConf} />
         </Grid>
       );
     }

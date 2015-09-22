@@ -4,31 +4,33 @@ import cx from 'classnames';
 import * as graphite from 'lib/utils/graphite';
 
 
-export default class ResponseCountGraph extends Component {
+export default class Graph extends Component {
 
   static propTypes = {
+    getUrl: PropTypes.func.isRequired,
+    kind: PropTypes.string.isRequired,
     width: PropTypes.integer,
     height: PropTypes.integer,
     timeSlice: PropTypes.string.isRequired,
-    title: PropTypes.string,
   }
 
   static defaultProps = {
     width: 580,
     height: 308,
-    title: 'Untitled',
   }
 
   render() {
-    var { timeSlice, ...graphConf } = this.props;
+    var { timeSlice, kind, ...graphConf } = this.props;
+    var title = kind + ': ' + graphite.graphTitles[timeSlice];
 
-    var src = graphite.responseCountUrl({
+    var graphUrl = this.props.getUrl({
       'from': timeSlice,
+      title: title,
       ...graphConf,
     });
-    var className = cx('graph');
+
     return (
-      <img className={className} src={src}
+      <img className={cx('graph')} src={graphUrl}
         width={graphConf.width} height={graphConf.height} />
     );
   }
