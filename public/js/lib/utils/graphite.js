@@ -8,13 +8,13 @@ export const LAST_WEEK = '-7days';
 export const LAST_30_DAYS = '-30days';
 export const LAST_90_DAYS = '-90days';
 
-export var graphTitles = {};
-graphTitles[LAST_15_MIN] = gettext('15 Minutes Ago');
-graphTitles[LAST_HOUR] = gettext('Last Hour');
-graphTitles[LAST_24_HOURS] = gettext('24 Hours Ago');
-graphTitles[LAST_WEEK] = gettext('Last Week');
-graphTitles[LAST_30_DAYS] = gettext('Last 30 Days');
-graphTitles[LAST_90_DAYS] = gettext('Last 90 Days');
+export var timeSliceTitles = {};
+timeSliceTitles[LAST_15_MIN] = gettext('15 Min Ago');
+timeSliceTitles[LAST_HOUR] = gettext('Last Hr');
+timeSliceTitles[LAST_24_HOURS] = gettext('24 Hr Ago');
+timeSliceTitles[LAST_WEEK] = gettext('Last Week');
+timeSliceTitles[LAST_30_DAYS] = gettext('Last 30 Days');
+timeSliceTitles[LAST_90_DAYS] = gettext('Last 90 Days');
 
 
 export function url(params) {

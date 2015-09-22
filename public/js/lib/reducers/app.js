@@ -5,7 +5,7 @@ import * as graphite from 'lib/utils/graphite';
 export const initialAppState = {
   error: null,
   panelSize: {},
-  graphHeight: 250,
+  graphHeight: 350,
   timeSlice: graphite.LAST_15_MIN,
 };
 
@@ -22,6 +22,10 @@ export default function app(state, action) {
           width: action.width,
           height: action.height,
         }),
+      });
+    case actionTypes.SET_TIME_SLICE:
+      return Object.assign({}, state, {
+        timeSlice: action.timeSlice,
       });
     default:
       return state || initialAppState;

@@ -9,6 +9,7 @@ import * as graphite from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
 import Graph from 'lib/components/graph';
+import TimeSliceNav from 'lib/components/time-slice-nav';
 import Spinner from 'lib/components/spinner';
 
 
@@ -58,16 +59,22 @@ export class App extends Component {
 
       return (
         <div>
-          <Graph kind="Response Count"
-            getUrl={graphite.responseCountUrl} {...graphConf} />
-          <Graph kind="Response Times"
-            getUrl={graphite.responseTimesUrl} {...graphConf} />
-          <Graph kind="Search Times"
-            getUrl={graphite.searchTimesUrl} {...graphConf} />
-          <Graph kind="Redirects and Errors"
-            getUrl={graphite.redirectsAndErrorsUrl} {...graphConf} />
-          <Graph kind="% of Auth'd Responses"
-            getUrl={graphite.authResponseCountUrl} {...graphConf} />
+          <TimeSliceNav
+            current={this.props.app.timeSlice}
+            setTimeSlice={this.boundAppActions.setTimeSlice}
+          />
+          <div>
+            <Graph kind="Response Count"
+              getUrl={graphite.responseCountUrl} {...graphConf} />
+            <Graph kind="Response Times"
+              getUrl={graphite.responseTimesUrl} {...graphConf} />
+            <Graph kind="Search Times"
+              getUrl={graphite.searchTimesUrl} {...graphConf} />
+            <Graph kind="Redirects and Errors"
+              getUrl={graphite.redirectsAndErrorsUrl} {...graphConf} />
+            <Graph kind="% of Auth'd Responses"
+              getUrl={graphite.authResponseCountUrl} {...graphConf} />
+          </div>
         </div>
       );
     }

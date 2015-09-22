@@ -27,6 +27,14 @@ export function checkForGraphite() {
 }
 
 
+export function setTimeSlice(key) {
+  return {
+    type: actionTypes.SET_TIME_SLICE,
+    timeSlice: key,
+  };
+}
+
+
 export function setWindowSize({width, height}) {
   const horizontalMargin = 40;  // matches padding * 2 from _base.scss
   return {
