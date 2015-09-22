@@ -1,9 +1,11 @@
 import * as actionTypes from 'lib/action-types';
+import * as graphite from 'lib/utils/graphite';
 
 
 export const initialAppState = {
   error: null,
   panelSize: {},
+  timeSlice: graphite.LAST_15_MIN,
 };
 
 

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { debounce } from 'underscore';
 
 import { gettext } from 'lib/utils';
+import { graphTitles } from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
 import ResponseCountGraph from 'lib/components/response-count-graph';
@@ -48,9 +49,16 @@ export class App extends Component {
       if (this.props.app.panelSize.width > 1000) {
         graphWidth = Math.round(graphWidth / 2, 1);
       }
+
+      var graphConf = {
+        width: graphWidth,
+        height: graphHeight,
+        timeSlice: this.props.app.timeSlice,
+        title: graphTitles[this.props.app.timeSlice],
+      };
       return (
         <div>
-          <ResponseCountGraph width={graphWidth} height={graphHeight} />
+          <ResponseCountGraph {...graphConf} />
         </div>
       );
     }

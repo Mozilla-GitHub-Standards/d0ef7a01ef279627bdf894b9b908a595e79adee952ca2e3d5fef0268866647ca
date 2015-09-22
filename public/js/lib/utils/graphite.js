@@ -1,3 +1,21 @@
+import { gettext } from 'lib/utils';
+
+// Time slices, as understood by Graphite on the query string.
+export const LAST_15_MIN = '-15minutes';
+export const LAST_HOUR = '-1hours';
+export const LAST_24_HOURS = '-24hours';
+export const LAST_WEEK = '-7days';
+export const LAST_30_DAYS = '-30days';
+export const LAST_90_DAYS = '-90days';
+
+export var graphTitles = {};
+graphTitles[LAST_15_MIN] = gettext('15 Minutes Ago');
+graphTitles[LAST_HOUR] = gettext('Last Hour');
+graphTitles[LAST_24_HOURS] = gettext('24 Hours Ago');
+graphTitles[LAST_WEEK] = gettext('Last Week');
+graphTitles[LAST_30_DAYS] = gettext('Last 30 Days');
+graphTitles[LAST_90_DAYS] = gettext('Last 90 Days');
+
 
 export function url(params) {
   // This URL is for prod. There is a different one for dev.
@@ -37,8 +55,6 @@ export function responseCountUrl({...params} = {}) {
       'stats.addons.response.500',
       'drawAsInfinite(stats.timers.addons.update.count)',
     ],
-    'from': '-15minutes',
-    title: '15 minutes',
     ...params,
   });
 }
