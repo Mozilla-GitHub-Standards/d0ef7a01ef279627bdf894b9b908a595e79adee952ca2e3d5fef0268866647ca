@@ -45,7 +45,7 @@ export class App extends Component {
     } else if (!this.props.app.panelSize.width) {
       return <Spinner text={gettext('Loading some hot graphs')} />;
     } else {
-      const graphHeight = 304;
+      var graphHeight = this.props.app.graphHeight;
       var columns = Math.round(this.props.app.panelSize.width / 700, 1);
       var graphWidth = Math.floor(this.props.app.panelSize.width / columns);
       console.log('grid columns:', columns, 'graphWidth:', graphWidth);

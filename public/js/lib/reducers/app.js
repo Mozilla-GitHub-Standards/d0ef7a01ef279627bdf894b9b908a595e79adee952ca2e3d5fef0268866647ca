@@ -5,6 +5,7 @@ import * as graphite from 'lib/utils/graphite';
 export const initialAppState = {
   error: null,
   panelSize: {},
+  graphHeight: 250,
   timeSlice: graphite.LAST_15_MIN,
 };
 
