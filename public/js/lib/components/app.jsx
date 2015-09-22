@@ -8,7 +8,6 @@ import { gettext } from 'lib/utils';
 import * as graphite from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
-import Grid from 'lib/components/grid';
 import Graph from 'lib/components/graph';
 import Spinner from 'lib/components/spinner';
 
@@ -46,18 +45,9 @@ export class App extends Component {
     } else if (!this.props.app.panelSize.width) {
       return <Spinner text={gettext('Loading some hot graphs')} />;
     } else {
-      const graphHeight = 300;
-      // This should match $grid-column-gutter from scss/inc/vars.scss
-      const gutterWidth = 10;
-
+      const graphHeight = 304;
       var columns = Math.round(this.props.app.panelSize.width / 700, 1);
-
-      var graphWidth = Math.round(
-        this.props.app.panelSize.width / columns, 1);
-      // Adjust width for gutters in the columns.
-      if (columns > 1) {
-        graphWidth -= (columns -1) * gutterWidth;
-      }
+      var graphWidth = Math.floor(this.props.app.panelSize.width / columns);
       console.log('grid columns:', columns, 'graphWidth:', graphWidth);
 
       var graphConf = {
@@ -65,10 +55,9 @@ export class App extends Component {
         height: graphHeight,
         timeSlice: this.props.app.timeSlice,
       };
-      var holderClass = cx('graph-holder');
 
       return (
-        <Grid columns={columns}>
+        <div>
           <Graph kind="Response Count"
             getUrl={graphite.responseCountUrl} {...graphConf} />
           <Graph kind="Response Times"
@@ -77,7 +66,7 @@ export class App extends Component {
             getUrl={graphite.redirectsAndErrorsUrl} {...graphConf} />
           <Graph kind="% of Auth'd Responses"
             getUrl={graphite.authResponseCountUrl} {...graphConf} />
-        </Grid>
+        </div>
       );
     }
   }
