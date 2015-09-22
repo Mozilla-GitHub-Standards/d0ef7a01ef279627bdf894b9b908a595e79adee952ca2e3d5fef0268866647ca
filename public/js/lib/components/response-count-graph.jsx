@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import cx from 'classnames';
 
 import * as graphite from 'lib/utils/graphite';
 
@@ -25,8 +26,10 @@ export default class ResponseCountGraph extends Component {
       'from': timeSlice,
       ...graphConf,
     });
+    var className = cx('graph');
     return (
-      <img src={src} width={graphConf.width} height={graphConf.height} />
+      <img className={className} src={src}
+        width={graphConf.width} height={graphConf.height} />
     );
   }
 

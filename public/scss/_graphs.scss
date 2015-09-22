@@ -1,0 +1,13 @@
+.grid-row {
+    .graph {
+        padding-left: $grid-column-gutter;
+    }
+    .graph:first-child {
+        padding-left: 0;
+    }
+}
+
+.graph {
+    margin: 0;
+    padding-bottom: $grid-column-gutter - 4;
+}

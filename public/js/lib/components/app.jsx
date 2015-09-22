@@ -2,11 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { debounce } from 'underscore';
+import cx from 'classnames';
 
 import { gettext } from 'lib/utils';
 import { graphTitles } from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
+import Grid from 'lib/components/grid';
 import ResponseCountGraph from 'lib/components/response-count-graph';
 import Spinner from 'lib/components/spinner';
 
@@ -45,10 +47,18 @@ export class App extends Component {
       return <Spinner text={gettext('Loading some hot graphs')} />;
     } else {
       const graphHeight = 300;
-      var graphWidth = this.props.app.panelSize.width;
-      if (this.props.app.panelSize.width > 1000) {
-        graphWidth = Math.round(graphWidth / 2, 1);
+      // This should match $grid-column-gutter from scss/inc/vars.scss
+      const gutterWidth = 10;
+
+      var columns = Math.round(this.props.app.panelSize.width / 700, 1);
+
+      var graphWidth = Math.round(
+        this.props.app.panelSize.width / columns, 1);
+      // Adjust width for gutters in the columns.
+      if (columns > 1) {
+        graphWidth -= (columns -1) * gutterWidth;
       }
+      console.log('grid columns:', columns, 'graphWidth:', graphWidth);
 
       var graphConf = {
         width: graphWidth,
@@ -56,10 +66,16 @@ export class App extends Component {
         timeSlice: this.props.app.timeSlice,
         title: graphTitles[this.props.app.timeSlice],
       };
+      var holderClass = cx('graph-holder');
+
       return (
-        <div>
+        <Grid columns={columns}>
           <ResponseCountGraph {...graphConf} />
-        </div>
+          <ResponseCountGraph {...graphConf} />
+          <ResponseCountGraph {...graphConf} />
+          <ResponseCountGraph {...graphConf} />
+          <ResponseCountGraph {...graphConf} />
+        </Grid>
       );
     }
   }
