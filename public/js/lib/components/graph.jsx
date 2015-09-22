@@ -21,11 +21,10 @@ export default class Graph extends Component {
 
   render() {
     var { timeSlice, kind, ...graphConf } = this.props;
-    var title = kind + ': ' + graphite.timeSliceTitles[timeSlice];
 
     var graphUrl = this.props.getUrl({
       'from': timeSlice,
-      title: title,
+      title: kind,
       ...graphConf,
     });
 
