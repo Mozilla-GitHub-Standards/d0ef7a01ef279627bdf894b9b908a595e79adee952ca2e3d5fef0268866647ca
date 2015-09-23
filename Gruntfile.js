@@ -18,4 +18,6 @@ module.exports = function(grunt) {
     ['clean:dist', 'sass:dev', 'webpack-dev-server:start', 'watch:sass']);
   grunt.registerTask('watch-static', 'Watches and rebuilds JS + CSS',
     ['clean:dist', 'sass:dev', 'webpack:dev', 'watch:sass']);
+  grunt.registerTask('gh-publish', 'Publish source to Github Pages',
+                     ['build', 'gh-pages']);
 };

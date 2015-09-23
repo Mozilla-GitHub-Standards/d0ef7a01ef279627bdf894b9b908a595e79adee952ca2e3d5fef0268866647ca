@@ -5,6 +5,11 @@ This is a private Mozilla dashboard to view health and performance stats for
 [statsd](https://github.com/etsy/statsd) and the graphs are provided by
 [graphite](https://graphite.readthedocs.org/en/latest/).
 
+## Check It Out
+
+The dashboard can be viewed here on Github Pages:
+[http://mozilla.github.io/amo-dashboard/](http://mozilla.github.io/amo-dashboard/)
+
 ## Installation
 
 You'll need Node JS for build management. Install and compile the assets:
@@ -24,3 +29,9 @@ edit React component code. It's pretty hot! Run it like this:
 Open:
 
     http://localhost:8080/webpack-dev-server/
+
+## Publishing To Github Pages
+
+To publish a new dashboard to Github Pages from the source, run this:
+
+    grunt gh-publish
