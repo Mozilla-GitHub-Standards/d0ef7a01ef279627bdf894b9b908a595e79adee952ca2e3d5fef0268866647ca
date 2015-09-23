@@ -5,7 +5,7 @@ import { gettext } from 'lib/utils';
 
 export function checkForGraphite() {
   return (dispatch) => {
-    fetch(graphite.responseCountUrl(), {mode: 'no-cors'})
+    fetch(graphite.responseCountUrl(), {mode: 'no-cors', cache: 'no-cache'})
       .then(response => {
         console.log('got graphite response');
         if (!response.ok && response.status > 0) {
