@@ -22,16 +22,22 @@ export default class Graph extends Component {
   }
 
   render() {
-    var { timeSlice, ...graphConf } = this.props;
+    var { width, height, title, ...props } = this.props;
 
     var graphUrl = this.props.getUrl({
-      'from': timeSlice,
-      ...graphConf,
+      'from': props.timeSlice,
+      width: width,
+      height: height,
+      title: title,
+      // Maybe there is a better way to do this? Without a new URL,
+      // React won't let the image reload. In other words: it would be
+      // better to rely on the browser cache rather than this.
+      _nonce: props.nonce,
     });
 
     return (
-      <img className={cx('graph')} src={graphUrl}
-        width={graphConf.width} height={graphConf.height} />
+      <img className={cx('graph')} width={width} height={height}
+        src={graphUrl} />
     );
   }
 

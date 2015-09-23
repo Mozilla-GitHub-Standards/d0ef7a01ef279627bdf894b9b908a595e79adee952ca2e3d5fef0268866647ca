@@ -105,15 +105,15 @@ export class App extends Component {
             setTimeSlice={this.boundAppActions.setTimeSlice}
           />
           <div>
-            <Graph title="Response Count"
+            <Graph title={gettext("Response Count")}
               getUrl={graphite.responseCountUrl} {...graphConf} />
-            <Graph title="Response Times"
+            <Graph title={gettext("Response Times")}
               getUrl={graphite.responseTimesUrl} {...graphConf} />
-            <Graph title="Search Times"
+            <Graph title={gettext("Search Times")}
               getUrl={graphite.searchTimesUrl} {...graphConf} />
-            <Graph title="Redirects and Errors"
+            <Graph title={gettext("Redirects and Errors")}
               getUrl={graphite.redirectsAndErrorsUrl} {...graphConf} />
-            <Graph title="% of Auth'd Responses"
+            <Graph title={gettext("% of Auth'd Responses")}
               getUrl={graphite.authResponseCountUrl} {...graphConf} />
           </div>
         </div>
