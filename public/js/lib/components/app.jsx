@@ -28,6 +28,11 @@ export class App extends Component {
   constructor(props) {
     super(props);
     this.boundAppActions = bindActionCreators(appActions, props.dispatch);
+
+    if (props.app.autoUpdateInterval) {
+      this.boundAppActions.startReloadingGraphs();
+    }
+
     this.boundAppActions.checkForGraphite()
     this.setPanelSize();
     window.onresize = debounce(this.setPanelSize, 300);
@@ -87,13 +92,16 @@ export class App extends Component {
       var graphConf = {
         width: graphWidth,
         height: graphHeight,
+        nonce: this.props.app.graphImageNonce,
         timeSlice: this.props.app.timeSlice,
       };
 
       return (
         <div>
           <Navigation
+            autoUpdateInterval={this.props.app.autoUpdateInterval}
             currentTimeSlice={this.props.app.timeSlice}
+            toggleGraphReloading={this.boundAppActions.toggleGraphReloading}
             setTimeSlice={this.boundAppActions.setTimeSlice}
           />
           <div>

@@ -7,6 +7,8 @@ import * as graphite from 'lib/utils/graphite';
 export default class Graph extends Component {
 
   static propTypes = {
+    // When this value changes, React will reload the images.
+    nonce: PropTypes.string.isRequired,
     getUrl: PropTypes.func.isRequired,
     width: PropTypes.integer,
     height: PropTypes.integer,
