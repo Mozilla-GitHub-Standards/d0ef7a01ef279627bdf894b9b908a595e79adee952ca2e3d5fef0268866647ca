@@ -4,10 +4,10 @@ import cx from 'classnames';
 import * as graphite from 'lib/utils/graphite';
 
 
-export default class TimeSliceNav extends Component {
+export default class Navigation extends Component {
 
   static propTypes = {
-    current: PropTypes.string.isRequired,
+    currentTimeSlice: PropTypes.string.isRequired,
     setTimeSlice: PropTypes.func.isRequired,
   }
 
@@ -15,7 +15,7 @@ export default class TimeSliceNav extends Component {
     var buttons = [];
     Object.keys(graphite.timeSliceTitles).forEach(key => {
       var classes = ['quiet'];
-      if (this.props.current === key) {
+      if (this.props.currentTimeSlice === key) {
         classes.push('active');
       }
       buttons.push(
@@ -31,7 +31,7 @@ export default class TimeSliceNav extends Component {
 
   render() {
     return (
-      <div className={cx('time-slice-nav')}>
+      <div className={cx('navigation')}>
         {this.renderButtons()}
       </div>
     );

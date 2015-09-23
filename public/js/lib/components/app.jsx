@@ -9,7 +9,7 @@ import * as graphite from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
 import Graph from 'lib/components/graph';
-import TimeSliceNav from 'lib/components/time-slice-nav';
+import Navigation from 'lib/components/navigation';
 import Spinner from 'lib/components/spinner';
 
 
@@ -92,8 +92,8 @@ export class App extends Component {
 
       return (
         <div>
-          <TimeSliceNav
-            current={this.props.app.timeSlice}
+          <Navigation
+            currentTimeSlice={this.props.app.timeSlice}
             setTimeSlice={this.boundAppActions.setTimeSlice}
           />
           <div>
