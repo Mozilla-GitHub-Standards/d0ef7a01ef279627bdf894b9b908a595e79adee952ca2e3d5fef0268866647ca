@@ -35,11 +35,10 @@ export function setTimeSlice(key) {
 }
 
 
-export function setWindowSize({width, height}) {
-  const horizontalMargin = 40;  // matches padding * 2 from _base.scss
+export function setPanelSize({width, height}) {
   return {
     type: actionTypes.DECLARE_PANEL_SIZE,
-    width: width && (width - horizontalMargin),
+    width: width,
     height: height,
   };
 }

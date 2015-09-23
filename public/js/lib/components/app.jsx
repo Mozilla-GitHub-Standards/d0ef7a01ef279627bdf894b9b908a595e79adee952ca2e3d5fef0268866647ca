@@ -29,14 +29,43 @@ export class App extends Component {
     super(props);
     this.boundAppActions = bindActionCreators(appActions, props.dispatch);
     this.boundAppActions.checkForGraphite()
-    this.setWindowSize();
-    window.onresize = debounce(this.setWindowSize, 300);
+    this.setPanelSize();
+    window.onresize = debounce(this.setPanelSize, 300);
   }
 
-  setWindowSize = () => {
-    this.boundAppActions.setWindowSize({
-      width: this.props.window.innerWidth,
-      height: this.props.window.innerHeight,
+  setPanelSize = () => {
+    var win = this.props.window;
+    var width;
+
+    if (win.clientWidth) {
+      console.log('setting panel size from clientWidth');
+      width = win.clientWidth;
+    } else {
+      var hasVScroll;
+      var cStyle = (document.body.currentStyle ||
+                    window.getComputedStyle(document.body, ""));
+
+      if (cStyle) {
+        // Check the overflow and overflowY properties
+        // for "auto" and "visible" values
+        hasVScroll = cStyle.overflow == "visible"
+                     || cStyle.overflowY == "visible"
+                     || (hasVScroll && cStyle.overflow == "auto")
+                     || (hasVScroll && cStyle.overflowY == "auto");
+      }
+      console.log('guessing inner width from CSS padding; innerWidth:',
+                  win.innerWidth);
+      var horizontalMargin = 40;  // matches padding * 2 from _base.scss
+      width = (win.innerWidth - horizontalMargin)
+      if (hasVScroll) {
+        console.log('adjusting width for scollbars');
+        width = width - 15;
+      }
+    }
+
+    this.boundAppActions.setPanelSize({
+      width: width,
+      height: win.clientHeight || win.innerHeight,
     });
   }
 
@@ -47,9 +76,13 @@ export class App extends Component {
       return <Spinner text={gettext('Loading some hot graphs')} />;
     } else {
       var graphHeight = this.props.app.graphHeight;
+      // Make a guess at how many columns they may want to see.
+      // TODO: make this configurable.
       var columns = Math.round(this.props.app.panelSize.width / 700, 1);
       var graphWidth = Math.floor(this.props.app.panelSize.width / columns);
-      console.log('grid columns:', columns, 'graphWidth:', graphWidth);
+      console.log('grid columns:', columns,
+                  'panel width:', this.props.app.panelSize.width,
+                  'graph width:', graphWidth);
 
       var graphConf = {
         width: graphWidth,
