@@ -56,7 +56,7 @@ export function pauseGraphReloading() {
   return (dispatch, getState) => {
     var state = getState();
     if (state.app.graphReloaderInterval) {
-      console.log('clearing graph reloader interval',
+      console.log('pausing graph reloader interval',
                   state.app.graphReloaderInterval);
       window.clearInterval(state.app.graphReloaderInterval);
     }
@@ -100,8 +100,10 @@ export function startReloadingGraphs() {
 export function stopReloadingGraphs() {
   return (dispatch, getState) => {
     var state = getState();
-    if (state.graphReloaderInterval) {
-      window.clearInterval(state.graphReloaderInterval);
+    if (state.app.graphReloaderInterval) {
+      console.log('stopping graph reloader interval',
+                  state.app.graphReloaderInterval);
+      window.clearInterval(state.app.graphReloaderInterval);
     }
     dispatch({
       type: actionTypes.STOP_RELOADING_GRAPHS,
