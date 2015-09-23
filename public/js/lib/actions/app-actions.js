@@ -52,30 +52,60 @@ export function reloadGraphImages() {
 }
 
 
-export function startReloadingGraphs({win=window} = {}) {
+export function pauseGraphReloading() {
   return (dispatch, getState) => {
     var state = getState();
-
-    var updateInterval = state.app.autoUpdateInterval;
-    if (updateInterval === 0) {
-      updateInterval = initialAppState.autoUpdateInterval;
+    if (state.app.graphReloaderInterval) {
+      console.log('clearing graph reloader interval',
+                  state.app.graphReloaderInterval);
+      window.clearInterval(state.app.graphReloaderInterval);
     }
-    console.log('starting to reload graphs at interval',
-                updateInterval);
+    dispatch({
+      type: actionTypes.PAUSE_RELOADING_GRAPHS,
+    });
+  };
+}
+
+
+export function resumeGraphReloading() {
+  return (dispatch, getState) => {
+    var state = getState();
+    var intervalRef = state.app.graphReloaderInterval;
+    if (state.app.autoUpdateInterval) {
+      console.log('starting a paused graph reloader');
+      var result = startGraphReloader(dispatch, state);
+      intervalRef = result.intervalRef;
+    }
+    dispatch({
+      type: actionTypes.RESUME_RELOADING_GRAPHS,
+      intervalRef: intervalRef,
+    });
+  };
+}
+
+
+export function startReloadingGraphs() {
+  return (dispatch, getState) => {
+    var state = getState();
+    var { intervalRef, updateInterval } = startGraphReloader(dispatch, state);
     dispatch({
       type: actionTypes.START_RELOADING_GRAPHS,
       updateInterval: updateInterval,
-      intervalRef: win.setInterval(() => {
-        dispatch(reloadGraphImages());
-      }, updateInterval),
+      intervalRef: intervalRef,
     });
   };
 }
 
 
 export function stopReloadingGraphs() {
-  return {
-    type: actionTypes.STOP_RELOADING_GRAPHS,
+  return (dispatch, getState) => {
+    var state = getState();
+    if (state.graphReloaderInterval) {
+      window.clearInterval(state.graphReloaderInterval);
+    }
+    dispatch({
+      type: actionTypes.STOP_RELOADING_GRAPHS,
+    });
   };
 }
 
@@ -88,5 +118,25 @@ export function toggleGraphReloading() {
     } else {
       dispatch(startReloadingGraphs());
     }
+  };
+}
+
+
+function startGraphReloader(dispatch, state) {
+  var updateInterval = state.app.autoUpdateInterval;
+
+  if (updateInterval === 0) {
+    updateInterval = initialAppState.autoUpdateInterval;
+  }
+  console.log('starting to reload graphs at interval',
+              updateInterval);
+
+  var intervalRef = window.setInterval(() => {
+    dispatch(reloadGraphImages());
+  }, updateInterval);
+
+  return {
+    intervalRef: intervalRef,
+    updateInterval: updateInterval,
   };
 }

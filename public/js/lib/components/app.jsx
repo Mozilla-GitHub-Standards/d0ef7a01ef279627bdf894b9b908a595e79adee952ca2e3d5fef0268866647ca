@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { debounce } from 'underscore';
 import cx from 'classnames';
 
-import { gettext } from 'lib/utils';
+import { addVisibilityHandler, gettext } from 'lib/utils';
 import * as graphite from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
@@ -36,6 +36,16 @@ export class App extends Component {
     this.boundAppActions.checkForGraphite()
     this.setPanelSize();
     window.onresize = debounce(this.setPanelSize, 300);
+
+    addVisibilityHandler(isVisible => {
+      if (this.props.app.autoUpdateInterval) {
+        if (isVisible) {
+          this.boundAppActions.resumeGraphReloading();
+        } else {
+          this.boundAppActions.pauseGraphReloading();
+        }
+      }
+    });
   }
 
   setPanelSize = () => {

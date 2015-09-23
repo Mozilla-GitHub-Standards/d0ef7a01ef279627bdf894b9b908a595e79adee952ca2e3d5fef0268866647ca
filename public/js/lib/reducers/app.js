@@ -29,9 +29,17 @@ export default function app(state, action) {
           height: action.height,
         }),
       });
+    case actionTypes.PAUSE_RELOADING_GRAPHS:
+      return Object.assign({}, state, {
+        graphReloaderInterval: initialAppState.graphReloaderInterval,
+      });
     case actionTypes.RELOAD_GRAPH_IMAGES:
       return Object.assign({}, state, {
         graphImageNonce: genId(),
+      });
+    case actionTypes.RESUME_RELOADING_GRAPHS:
+      return Object.assign({}, state, {
+        graphReloaderInterval: action.intervalRef,
       });
     case actionTypes.START_RELOADING_GRAPHS:
       return Object.assign({}, state, {
@@ -39,9 +47,6 @@ export default function app(state, action) {
         graphReloaderInterval: action.intervalRef,
       });
     case actionTypes.STOP_RELOADING_GRAPHS:
-      if (state.graphReloaderInterval) {
-        window.clearInterval(state.graphReloaderInterval);
-      }
       return Object.assign({}, state, {
         autoUpdateInterval: 0,
         graphReloaderInterval: initialAppState.graphReloaderInterval,
