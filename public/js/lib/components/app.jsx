@@ -40,7 +40,8 @@ export class App extends Component {
     addVisibilityHandler(isVisible => {
       if (this.props.app.autoUpdateInterval) {
         if (isVisible) {
-          this.boundAppActions.resumeGraphReloading();
+          this.boundAppActions.reloadGraphImages();  // initial reload
+          this.boundAppActions.resumeGraphReloading();  // interval
         } else {
           this.boundAppActions.pauseGraphReloading();
         }
