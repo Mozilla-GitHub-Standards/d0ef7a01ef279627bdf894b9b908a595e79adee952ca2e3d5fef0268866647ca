@@ -1,0 +1,49 @@
+.button {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.button,
+a.button,
+button {
+  @include font();
+  background: #fff;
+  border: 0;
+  border-radius: $small-border-radius;
+  color: $dark-grey;
+  cursor: pointer;
+  font-size: $base-font;
+  margin: 10px 0;
+  padding: 0.5em 1em;
+  transition-duration: $short-transition;
+  transition-property: background-color;
+  text-align: center;
+  line-height: 1.5em;
+
+  &:active,
+  &:hover,
+  &:focus,
+  &.active {
+    color: #fff;
+    background: $the-real-blue;
+  }
+
+  &:focus {
+    @include focus();
+  }
+
+  &:disabled,
+  &.disabled {
+    background: $button-background-disabled-color;
+    cursor: not-allowed;
+  }
+
+  &.warning {
+    background: $awooga-red;
+  }
+}
+
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
