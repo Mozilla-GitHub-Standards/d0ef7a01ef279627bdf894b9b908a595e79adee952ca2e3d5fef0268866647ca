@@ -8,10 +8,10 @@ export default class Graph extends Component {
 
   static propTypes = {
     getUrl: PropTypes.func.isRequired,
-    kind: PropTypes.string.isRequired,
     width: PropTypes.integer,
     height: PropTypes.integer,
     timeSlice: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
   }
 
   static defaultProps = {
@@ -20,11 +20,10 @@ export default class Graph extends Component {
   }
 
   render() {
-    var { timeSlice, kind, ...graphConf } = this.props;
+    var { timeSlice, ...graphConf } = this.props;
 
     var graphUrl = this.props.getUrl({
       'from': timeSlice,
-      title: kind,
       ...graphConf,
     });
 
