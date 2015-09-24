@@ -5,6 +5,7 @@ import { debounce } from 'underscore';
 import cx from 'classnames';
 
 import { addVisibilityHandler, gettext } from 'lib/utils';
+import { getGraphSet } from 'lib/constants/graph-sets';
 import * as graphite from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';
@@ -100,33 +101,31 @@ export class App extends Component {
                   'panel width:', this.props.app.panelSize.width,
                   'graph width:', graphWidth);
 
-      var graphConf = {
+      var graphProps = {
         width: graphWidth,
         height: graphHeight,
         nonce: this.props.app.graphImageNonce,
         timeSlice: this.props.app.timeSlice,
       };
 
+      var conf = getGraphSet(this.props.app.graphSet);
+      if (!conf) {
+        return (
+          <Error
+            message={'unknown graph set: ' + this.props.app.graphSet}/>
+        );
+      }
+      var GraphSet = conf.component;
+
       return (
         <div>
           <Navigation
             autoUpdateInterval={this.props.app.autoUpdateInterval}
             currentTimeSlice={this.props.app.timeSlice}
-            toggleGraphReloading={this.boundAppActions.toggleGraphReloading}
-            setTimeSlice={this.boundAppActions.setTimeSlice}
+            currentGraphSet={this.props.app.graphSet}
+            {...this.boundAppActions}
           />
-          <div>
-            <Graph title={gettext("Response Count")}
-              getUrl={graphite.responseCountUrl} {...graphConf} />
-            <Graph title={gettext("Response Times")}
-              getUrl={graphite.responseTimesUrl} {...graphConf} />
-            <Graph title={gettext("Search Times")}
-              getUrl={graphite.searchTimesUrl} {...graphConf} />
-            <Graph title={gettext("Redirects and Errors")}
-              getUrl={graphite.redirectsAndErrorsUrl} {...graphConf} />
-            <Graph title={gettext("% of Auth'd Responses")}
-              getUrl={graphite.authResponseCountUrl} {...graphConf} />
-          </div>
+          <GraphSet graphProps={graphProps} />
         </div>
       );
     }

@@ -1,4 +1,4 @@
-import * as actionTypes from 'lib/action-types';
+import * as actionTypes from 'lib/constants/action-types';
 import * as graphite from 'lib/utils/graphite'
 import { gettext } from 'lib/utils';
 import { initialAppState } from 'lib/reducers/app';
@@ -120,6 +120,14 @@ export function toggleGraphReloading() {
     } else {
       dispatch(startReloadingGraphs());
     }
+  };
+}
+
+
+export function viewGraphSet(graphSet) {
+  return {
+    type: actionTypes.VIEW_GRAPH_SET,
+    graphSet: graphSet,
   };
 }
 

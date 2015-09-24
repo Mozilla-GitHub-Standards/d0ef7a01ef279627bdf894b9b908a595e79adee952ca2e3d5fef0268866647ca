@@ -58,7 +58,7 @@
 	
 	var _libComponentsApp2 = _interopRequireDefault(_libComponentsApp);
 	
-	var _libDataStore = __webpack_require__(188);
+	var _libDataStore = __webpack_require__(191);
 	
 	var _libDataStore2 = _interopRequireDefault(_libDataStore);
 	
@@ -21660,27 +21660,29 @@
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libUtilsGraphite = __webpack_require__(179);
+	var _libConstantsGraphSets = __webpack_require__(179);
+	
+	var _libUtilsGraphite = __webpack_require__(181);
 	
 	var graphite = _interopRequireWildcard(_libUtilsGraphite);
 	
-	var _libActionsAppActions = __webpack_require__(180);
+	var _libActionsAppActions = __webpack_require__(184);
 	
 	var appActions = _interopRequireWildcard(_libActionsAppActions);
 	
-	var _libComponentsError = __webpack_require__(184);
+	var _libComponentsError = __webpack_require__(188);
 	
 	var _libComponentsError2 = _interopRequireDefault(_libComponentsError);
 	
-	var _libComponentsGraph = __webpack_require__(185);
+	var _libComponentsGraph = __webpack_require__(182);
 	
 	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
 	
-	var _libComponentsNavigation = __webpack_require__(186);
+	var _libComponentsNavigation = __webpack_require__(189);
 	
 	var _libComponentsNavigation2 = _interopRequireDefault(_libComponentsNavigation);
 	
-	var _libComponentsSpinner = __webpack_require__(187);
+	var _libComponentsSpinner = __webpack_require__(190);
 	
 	var _libComponentsSpinner2 = _interopRequireDefault(_libComponentsSpinner);
 	
@@ -21778,36 +21780,29 @@
 	        var graphWidth = Math.floor(this.props.app.panelSize.width / columns);
 	        console.log('grid columns:', columns, 'panel width:', this.props.app.panelSize.width, 'graph width:', graphWidth);
 	
-	        var graphConf = {
+	        var graphProps = {
 	          width: graphWidth,
 	          height: graphHeight,
 	          nonce: this.props.app.graphImageNonce,
 	          timeSlice: this.props.app.timeSlice
 	        };
 	
+	        var conf = (0, _libConstantsGraphSets.getGraphSet)(this.props.app.graphSet);
+	        if (!conf) {
+	          return _react2['default'].createElement(_libComponentsError2['default'], {
+	            message: 'unknown graph set: ' + this.props.app.graphSet });
+	        }
+	        var GraphSet = conf.component;
+	
 	        return _react2['default'].createElement(
 	          'div',
 	          null,
-	          _react2['default'].createElement(_libComponentsNavigation2['default'], {
+	          _react2['default'].createElement(_libComponentsNavigation2['default'], _extends({
 	            autoUpdateInterval: this.props.app.autoUpdateInterval,
 	            currentTimeSlice: this.props.app.timeSlice,
-	            toggleGraphReloading: this.boundAppActions.toggleGraphReloading,
-	            setTimeSlice: this.boundAppActions.setTimeSlice
-	          }),
-	          _react2['default'].createElement(
-	            'div',
-	            null,
-	            _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Response Count"),
-	              getUrl: graphite.responseCountUrl }, graphConf)),
-	            _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Response Times"),
-	              getUrl: graphite.responseTimesUrl }, graphConf)),
-	            _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Search Times"),
-	              getUrl: graphite.searchTimesUrl }, graphConf)),
-	            _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Redirects and Errors"),
-	              getUrl: graphite.redirectsAndErrorsUrl }, graphConf)),
-	            _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("% of Auth'd Responses"),
-	              getUrl: graphite.authResponseCountUrl }, graphConf))
-	          )
+	            currentGraphSet: this.props.app.graphSet
+	          }, this.boundAppActions)),
+	          _react2['default'].createElement(GraphSet, { graphProps: graphProps })
 	        );
 	      }
 	    }
@@ -23503,6 +23498,129 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+	exports.getGraphSet = getGraphSet;
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var _libUtils = __webpack_require__(178);
+	
+	var _libComponentsSitePerf = __webpack_require__(180);
+	
+	var _libComponentsSitePerf2 = _interopRequireDefault(_libComponentsSitePerf);
+	
+	var _libComponentsAuthResponses = __webpack_require__(183);
+	
+	var _libComponentsAuthResponses2 = _interopRequireDefault(_libComponentsAuthResponses);
+	
+	var registry = {};
+	
+	function getGraphSet(key) {
+	  return registry[key];
+	}
+	
+	function register(set) {
+	  registry[set.key] = set;
+	  return set;
+	}
+	
+	var graphSetList = [register({
+	  key: 'site-performance',
+	  name: (0, _libUtils.gettext)('Site Performance'),
+	  component: _libComponentsSitePerf2['default']
+	}), register({
+	  key: 'auth-requests',
+	  name: (0, _libUtils.gettext)('Authenticated Requests'),
+	  component: _libComponentsAuthResponses2['default']
+	})];
+	exports.graphSetList = graphSetList;
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _libUtils = __webpack_require__(178);
+	
+	var _libUtilsGraphite = __webpack_require__(181);
+	
+	var graphite = _interopRequireWildcard(_libUtilsGraphite);
+	
+	var _libComponentsGraph = __webpack_require__(182);
+	
+	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
+	
+	var SitePerf = (function (_Component) {
+	  _inherits(SitePerf, _Component);
+	
+	  function SitePerf() {
+	    _classCallCheck(this, SitePerf);
+	
+	    _get(Object.getPrototypeOf(SitePerf.prototype), 'constructor', this).apply(this, arguments);
+	  }
+	
+	  _createClass(SitePerf, [{
+	    key: 'render',
+	    value: function render() {
+	      var graphProps = this.props.graphProps;
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Response Count"),
+	          getUrl: graphite.responseCountUrl }, graphProps)),
+	        _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Response Times"),
+	          getUrl: graphite.responseTimesUrl }, graphProps)),
+	        _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Search Times"),
+	          getUrl: graphite.searchTimesUrl }, graphProps)),
+	        _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("Redirects and Errors"),
+	          getUrl: graphite.redirectsAndErrorsUrl }, graphProps))
+	      );
+	    }
+	  }], [{
+	    key: 'propTypes',
+	    value: {
+	      graphProps: _react.PropTypes.object.isRequired
+	    },
+	    enumerable: true
+	  }]);
+	
+	  return SitePerf;
+	})(_react.Component);
+	
+	exports['default'] = SitePerf;
+	module.exports = exports['default'];
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
@@ -23617,7 +23735,175 @@
 	}
 
 /***/ },
-/* 180 */
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(177);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _libUtilsGraphite = __webpack_require__(181);
+	
+	var graphite = _interopRequireWildcard(_libUtilsGraphite);
+	
+	var Graph = (function (_Component) {
+	  _inherits(Graph, _Component);
+	
+	  function Graph() {
+	    _classCallCheck(this, Graph);
+	
+	    _get(Object.getPrototypeOf(Graph.prototype), 'constructor', this).apply(this, arguments);
+	  }
+	
+	  _createClass(Graph, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var width = _props.width;
+	      var height = _props.height;
+	      var title = _props.title;
+	
+	      var props = _objectWithoutProperties(_props, ['width', 'height', 'title']);
+	
+	      var graphUrl = this.props.getUrl({
+	        'from': props.timeSlice,
+	        width: width,
+	        height: height,
+	        title: title,
+	        // Maybe there is a better way to do this? Without a new URL,
+	        // React won't let the image reload. In other words: it would be
+	        // better to rely on the browser cache rather than this.
+	        _nonce: props.nonce
+	      });
+	
+	      return _react2['default'].createElement('img', { className: (0, _classnames2['default'])('graph'), width: width, height: height,
+	        src: graphUrl });
+	    }
+	  }], [{
+	    key: 'propTypes',
+	    value: {
+	      // When this value changes, React will reload the images.
+	      nonce: _react.PropTypes.string.isRequired,
+	      getUrl: _react.PropTypes.func.isRequired,
+	      width: _react.PropTypes.integer,
+	      height: _react.PropTypes.integer,
+	      timeSlice: _react.PropTypes.string.isRequired,
+	      title: _react.PropTypes.string.isRequired
+	    },
+	    enumerable: true
+	  }, {
+	    key: 'defaultProps',
+	    value: {
+	      width: 580,
+	      height: 308
+	    },
+	    enumerable: true
+	  }]);
+	
+	  return Graph;
+	})(_react.Component);
+	
+	exports['default'] = Graph;
+	module.exports = exports['default'];
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _libUtils = __webpack_require__(178);
+	
+	var _libUtilsGraphite = __webpack_require__(181);
+	
+	var graphite = _interopRequireWildcard(_libUtilsGraphite);
+	
+	var _libComponentsGraph = __webpack_require__(182);
+	
+	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
+	
+	var AuthResponses = (function (_Component) {
+	  _inherits(AuthResponses, _Component);
+	
+	  function AuthResponses() {
+	    _classCallCheck(this, AuthResponses);
+	
+	    _get(Object.getPrototypeOf(AuthResponses.prototype), 'constructor', this).apply(this, arguments);
+	  }
+	
+	  _createClass(AuthResponses, [{
+	    key: 'render',
+	    value: function render() {
+	      var graphProps = this.props.graphProps;
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(_libComponentsGraph2['default'], _extends({ title: (0, _libUtils.gettext)("% of Auth'd Responses"),
+	          getUrl: graphite.authResponseCountUrl }, graphProps))
+	      );
+	    }
+	  }], [{
+	    key: 'propTypes',
+	    value: {
+	      graphProps: _react.PropTypes.object.isRequired
+	    },
+	    enumerable: true
+	  }]);
+	
+	  return AuthResponses;
+	})(_react.Component);
+	
+	exports['default'] = AuthResponses;
+	module.exports = exports['default'];
+
+/***/ },
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(fetch) {'use strict';
@@ -23634,20 +23920,21 @@
 	exports.startReloadingGraphs = startReloadingGraphs;
 	exports.stopReloadingGraphs = stopReloadingGraphs;
 	exports.toggleGraphReloading = toggleGraphReloading;
+	exports.viewGraphSet = viewGraphSet;
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _libActionTypes = __webpack_require__(182);
+	var _libConstantsActionTypes = __webpack_require__(186);
 	
-	var actionTypes = _interopRequireWildcard(_libActionTypes);
+	var actionTypes = _interopRequireWildcard(_libConstantsActionTypes);
 	
-	var _libUtilsGraphite = __webpack_require__(179);
+	var _libUtilsGraphite = __webpack_require__(181);
 	
 	var graphite = _interopRequireWildcard(_libUtilsGraphite);
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libReducersApp = __webpack_require__(183);
+	var _libReducersApp = __webpack_require__(187);
 	
 	function checkForGraphite() {
 	  return function (dispatch) {
@@ -23761,6 +24048,13 @@
 	  };
 	}
 	
+	function viewGraphSet(graphSet) {
+	  return {
+	    type: actionTypes.VIEW_GRAPH_SET,
+	    graphSet: graphSet
+	  };
+	}
+	
 	function startGraphReloader(dispatch, state) {
 	  var updateInterval = state.app.autoUpdateInterval;
 	
@@ -23778,10 +24072,10 @@
 	    updateInterval: updateInterval
 	  };
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(181)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(185)))
 
 /***/ },
-/* 181 */
+/* 185 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*** IMPORTS FROM imports-loader ***/
@@ -24124,7 +24418,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 182 */
+/* 186 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24148,9 +24442,11 @@
 	exports.START_RELOADING_GRAPHS = START_RELOADING_GRAPHS;
 	var STOP_RELOADING_GRAPHS = 'STOP_RELOADING_GRAPHS';
 	exports.STOP_RELOADING_GRAPHS = STOP_RELOADING_GRAPHS;
+	var VIEW_GRAPH_SET = 'VIEW_GRAPH_SET';
+	exports.VIEW_GRAPH_SET = VIEW_GRAPH_SET;
 
 /***/ },
-/* 183 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24162,15 +24458,17 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _libActionTypes = __webpack_require__(182);
+	var _libConstantsActionTypes = __webpack_require__(186);
 	
-	var actionTypes = _interopRequireWildcard(_libActionTypes);
+	var actionTypes = _interopRequireWildcard(_libConstantsActionTypes);
 	
-	var _libUtilsGraphite = __webpack_require__(179);
+	var _libUtilsGraphite = __webpack_require__(181);
 	
 	var graphite = _interopRequireWildcard(_libUtilsGraphite);
 	
 	var _libUtils = __webpack_require__(178);
+	
+	var _libConstantsGraphSets = __webpack_require__(179);
 	
 	var initialAppState = {
 	  error: null,
@@ -24181,6 +24479,7 @@
 	  graphImageNonce: (0, _libUtils.genId)(),
 	  // reference to setInterval() instance.
 	  graphReloaderInterval: null,
+	  graphSet: _libConstantsGraphSets.graphSetList[0].key,
 	  timeSlice: graphite.LAST_15_MIN
 	};
 	
@@ -24225,13 +24524,17 @@
 	      return Object.assign({}, state, {
 	        timeSlice: action.timeSlice
 	      });
+	    case actionTypes.VIEW_GRAPH_SET:
+	      return Object.assign({}, state, {
+	        graphSet: action.graphSet
+	      });
 	    default:
 	      return state || initialAppState;
 	  }
 	}
 
 /***/ },
-/* 184 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24301,103 +24604,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 185 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _classnames = __webpack_require__(177);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	var _libUtilsGraphite = __webpack_require__(179);
-	
-	var graphite = _interopRequireWildcard(_libUtilsGraphite);
-	
-	var Graph = (function (_Component) {
-	  _inherits(Graph, _Component);
-	
-	  function Graph() {
-	    _classCallCheck(this, Graph);
-	
-	    _get(Object.getPrototypeOf(Graph.prototype), 'constructor', this).apply(this, arguments);
-	  }
-	
-	  _createClass(Graph, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var width = _props.width;
-	      var height = _props.height;
-	      var title = _props.title;
-	
-	      var props = _objectWithoutProperties(_props, ['width', 'height', 'title']);
-	
-	      var graphUrl = this.props.getUrl({
-	        'from': props.timeSlice,
-	        width: width,
-	        height: height,
-	        title: title,
-	        // Maybe there is a better way to do this? Without a new URL,
-	        // React won't let the image reload. In other words: it would be
-	        // better to rely on the browser cache rather than this.
-	        _nonce: props.nonce
-	      });
-	
-	      return _react2['default'].createElement('img', { className: (0, _classnames2['default'])('graph'), width: width, height: height,
-	        src: graphUrl });
-	    }
-	  }], [{
-	    key: 'propTypes',
-	    value: {
-	      // When this value changes, React will reload the images.
-	      nonce: _react.PropTypes.string.isRequired,
-	      getUrl: _react.PropTypes.func.isRequired,
-	      width: _react.PropTypes.integer,
-	      height: _react.PropTypes.integer,
-	      timeSlice: _react.PropTypes.string.isRequired,
-	      title: _react.PropTypes.string.isRequired
-	    },
-	    enumerable: true
-	  }, {
-	    key: 'defaultProps',
-	    value: {
-	      width: 580,
-	      height: 308
-	    },
-	    enumerable: true
-	  }]);
-	
-	  return Graph;
-	})(_react.Component);
-	
-	exports['default'] = Graph;
-	module.exports = exports['default'];
-
-/***/ },
-/* 186 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24426,11 +24633,13 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _libUtilsGraphite = __webpack_require__(179);
+	var _libUtilsGraphite = __webpack_require__(181);
 	
 	var graphite = _interopRequireWildcard(_libUtilsGraphite);
 	
 	var _libUtils = __webpack_require__(178);
+	
+	var _libConstantsGraphSets = __webpack_require__(179);
 	
 	var Navigation = (function (_Component) {
 	  _inherits(Navigation, _Component);
@@ -24445,6 +24654,13 @@
 	    this.onAutoUpdateChange = function () {
 	      _this.props.toggleGraphReloading();
 	    };
+	
+	    this.onChangeGraphSet = function (e) {
+	      var sel = e.target;
+	      var value = sel.options[sel.selectedIndex].value;
+	      console.log('changed graph set to', value);
+	      _this.props.viewGraphSet(value);
+	    };
 	  }
 	
 	  _createClass(Navigation, [{
@@ -24453,6 +24669,19 @@
 	      var _this2 = this;
 	
 	      var menu = [];
+	
+	      menu.push(_react2['default'].createElement(
+	        'select',
+	        { key: 'graph-set', value: this.props.currentGraphSet,
+	          onChange: this.onChangeGraphSet },
+	        _libConstantsGraphSets.graphSetList.map(function (set) {
+	          return _react2['default'].createElement(
+	            'option',
+	            { value: set.key },
+	            set.name
+	          );
+	        })
+	      ));
 	
 	      Object.keys(graphite.timeSliceTitles).forEach(function (key) {
 	        var classes = ['quiet'];
@@ -24495,9 +24724,11 @@
 	    key: 'propTypes',
 	    value: {
 	      autoUpdateInterval: _react.PropTypes.number.isRequired,
+	      currentGraphSet: _react.PropTypes.string.isRequired,
 	      currentTimeSlice: _react.PropTypes.string.isRequired,
 	      toggleGraphReloading: _react.PropTypes.func.isRequired,
-	      setTimeSlice: _react.PropTypes.func.isRequired
+	      setTimeSlice: _react.PropTypes.func.isRequired,
+	      viewGraphSet: _react.PropTypes.func.isRequired
 	    },
 	    enumerable: true
 	  }, {
@@ -24515,7 +24746,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 187 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24584,7 +24815,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 188 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24598,11 +24829,11 @@
 	
 	var _redux = __webpack_require__(165);
 	
-	var _reduxThunk = __webpack_require__(189);
+	var _reduxThunk = __webpack_require__(192);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reducers = __webpack_require__(190);
+	var _reducers = __webpack_require__(193);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -24612,7 +24843,7 @@
 	  return function (next) {
 	    return function (action) {
 	      if (typeof action.type === 'undefined') {
-	        console.error('action.type is undefined.', 'Check that the action is defined in constants/action-types.js');
+	        console.error('action.type is undefined.', 'Check that the action is defined in lib/constants/action-types.js');
 	      }
 	      console.info('redux: dispatching', action);
 	      var result = next(action);
@@ -24642,7 +24873,7 @@
 	exports['default'] = createReduxStore();
 
 /***/ },
-/* 189 */
+/* 192 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24664,7 +24895,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 190 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24677,7 +24908,7 @@
 	
 	var _redux = __webpack_require__(165);
 	
-	var _app = __webpack_require__(183);
+	var _app = __webpack_require__(187);
 	
 	var _app2 = _interopRequireDefault(_app);
 	

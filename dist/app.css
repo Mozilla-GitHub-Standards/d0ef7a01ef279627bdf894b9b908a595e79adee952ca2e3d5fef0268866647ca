@@ -501,6 +501,18 @@ input[type='checkbox'] {
   margin-right: 4px;
 }
 
+input, select, optgroup, textarea {
+  color: #000;
+}
+
+select {
+  font-size: 14px;
+  padding: 0.5em 1.5em;
+  line-height: 1.5em;
+  outline: none;
+  -webkit-appearance: none;
+}
+
 .navigation button, .navigation .button {
   margin-left: 2px;
 }

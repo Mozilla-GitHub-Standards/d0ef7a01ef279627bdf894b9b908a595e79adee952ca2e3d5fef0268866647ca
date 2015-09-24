@@ -7,3 +7,15 @@ input {
         margin-right: 4px;
     }
 }
+
+input, select, optgroup, textarea {
+    color: $black;
+}
+
+select {
+    font-size: $base-font;
+    padding: 0.5em 1.5em;
+    line-height: 1.5em;
+    outline: none;
+    -webkit-appearance: none;
+}
