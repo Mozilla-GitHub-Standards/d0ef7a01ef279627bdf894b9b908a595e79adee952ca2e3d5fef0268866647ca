@@ -58,7 +58,7 @@
 	
 	var _libComponentsApp2 = _interopRequireDefault(_libComponentsApp);
 	
-	var _libDataStore = __webpack_require__(192);
+	var _libDataStore = __webpack_require__(193);
 	
 	var _libDataStore2 = _interopRequireDefault(_libDataStore);
 	
@@ -21660,17 +21660,17 @@
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libConstantsGraphSets = __webpack_require__(179);
+	var _libGraphSets = __webpack_require__(179);
 	
 	var _libUtilsGraphite = __webpack_require__(181);
 	
 	var graphite = _interopRequireWildcard(_libUtilsGraphite);
 	
-	var _libActionsAppActions = __webpack_require__(185);
+	var _libActionsAppActions = __webpack_require__(186);
 	
 	var appActions = _interopRequireWildcard(_libActionsAppActions);
 	
-	var _libComponentsError = __webpack_require__(189);
+	var _libComponentsError = __webpack_require__(190);
 	
 	var _libComponentsError2 = _interopRequireDefault(_libComponentsError);
 	
@@ -21678,11 +21678,11 @@
 	
 	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
 	
-	var _libComponentsNavigation = __webpack_require__(190);
+	var _libComponentsNavigation = __webpack_require__(191);
 	
 	var _libComponentsNavigation2 = _interopRequireDefault(_libComponentsNavigation);
 	
-	var _libComponentsSpinner = __webpack_require__(191);
+	var _libComponentsSpinner = __webpack_require__(192);
 	
 	var _libComponentsSpinner2 = _interopRequireDefault(_libComponentsSpinner);
 	
@@ -21790,7 +21790,7 @@
 	          _nonce: this.props.app.graphImageNonce
 	        };
 	
-	        var conf = (0, _libConstantsGraphSets.getGraphSet)(this.props.app.graphSet);
+	        var conf = (0, _libGraphSets.getGraphSet)(this.props.app.graphSet);
 	        if (!conf) {
 	          return _react2['default'].createElement(_libComponentsError2['default'], {
 	            message: 'unknown graph set: ' + this.props.app.graphSet });
@@ -23507,17 +23507,21 @@
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libComponentsAddonLifecycle = __webpack_require__(180);
+	var _addonLifecycle = __webpack_require__(180);
 	
-	var _libComponentsAddonLifecycle2 = _interopRequireDefault(_libComponentsAddonLifecycle);
+	var _addonLifecycle2 = _interopRequireDefault(_addonLifecycle);
 	
-	var _libComponentsAuthResponses = __webpack_require__(183);
+	var _authResponses = __webpack_require__(183);
 	
-	var _libComponentsAuthResponses2 = _interopRequireDefault(_libComponentsAuthResponses);
+	var _authResponses2 = _interopRequireDefault(_authResponses);
 	
-	var _libComponentsSitePerf = __webpack_require__(184);
+	var _sitePerf = __webpack_require__(184);
 	
-	var _libComponentsSitePerf2 = _interopRequireDefault(_libComponentsSitePerf);
+	var _sitePerf2 = _interopRequireDefault(_sitePerf);
+	
+	var _validatorPerf = __webpack_require__(185);
+	
+	var _validatorPerf2 = _interopRequireDefault(_validatorPerf);
 	
 	var registry = {};
 	
@@ -23533,15 +23537,19 @@
 	var graphSetList = [register({
 	  key: 'site-performance',
 	  name: (0, _libUtils.gettext)('Site Performance'),
-	  component: _libComponentsSitePerf2['default']
+	  component: _sitePerf2['default']
 	}), register({
 	  key: 'addon-lifecycle',
 	  name: (0, _libUtils.gettext)('Add-on Lifecycle'),
-	  component: _libComponentsAddonLifecycle2['default']
+	  component: _addonLifecycle2['default']
+	}), register({
+	  key: 'validator-perf',
+	  name: (0, _libUtils.gettext)('Add-on Validation'),
+	  component: _validatorPerf2['default']
 	}), register({
 	  key: 'auth-requests',
 	  name: (0, _libUtils.gettext)('Authenticated Requests'),
-	  component: _libComponentsAuthResponses2['default']
+	  component: _authResponses2['default']
 	})];
 	exports.graphSetList = graphSetList;
 
@@ -23643,6 +23651,7 @@
 	exports.allAddonStatusChangesUrl = allAddonStatusChangesUrl;
 	exports.listedAddonStatusChangesUrl = listedAddonStatusChangesUrl;
 	exports.unlistedAddonStatusChangesUrl = unlistedAddonStatusChangesUrl;
+	exports.addonValidationTimesUrl = addonValidationTimesUrl;
 	
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
@@ -23780,6 +23789,17 @@
 	  return url(_extends({
 	    vtitle: 'count',
 	    target: addonStatusChangeTargets('unlisted')
+	  }, params));
+	}
+	
+	function addonValidationTimesUrl() {
+	  var _ref9 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	  var params = _objectWithoutProperties(_ref9, []);
+	
+	  return url(_extends({
+	    vtitle: 'milleseconds',
+	    target: ['stats.timers.addons.devhub.validator.lower', 'stats.timers.addons.devhub.validator.mean', 'stats.timers.addons.devhub.validator.upper_90']
 	  }, params));
 	}
 	
@@ -24024,6 +24044,77 @@
 /* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _libUtils = __webpack_require__(178);
+	
+	var _libUtilsGraphite = __webpack_require__(181);
+	
+	var graphite = _interopRequireWildcard(_libUtilsGraphite);
+	
+	var _libComponentsGraph = __webpack_require__(182);
+	
+	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
+	
+	var ValidatorPerf = (function (_Component) {
+	  _inherits(ValidatorPerf, _Component);
+	
+	  function ValidatorPerf() {
+	    _classCallCheck(this, ValidatorPerf);
+	
+	    _get(Object.getPrototypeOf(ValidatorPerf.prototype), 'constructor', this).apply(this, arguments);
+	  }
+	
+	  _createClass(ValidatorPerf, [{
+	    key: 'render',
+	    value: function render() {
+	      var graphProps = this.props.graphProps;
+	
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Add-on Validation Times"),
+	          getUrl: graphite.addonValidationTimesUrl, graphProps: graphProps })
+	      );
+	    }
+	  }], [{
+	    key: 'propTypes',
+	    value: {
+	      graphProps: _react.PropTypes.object.isRequired
+	    },
+	    enumerable: true
+	  }]);
+	
+	  return ValidatorPerf;
+	})(_react.Component);
+	
+	exports['default'] = ValidatorPerf;
+	module.exports = exports['default'];
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(fetch) {'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
@@ -24042,7 +24133,7 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _libConstantsActionTypes = __webpack_require__(187);
+	var _libConstantsActionTypes = __webpack_require__(188);
 	
 	var actionTypes = _interopRequireWildcard(_libConstantsActionTypes);
 	
@@ -24052,7 +24143,7 @@
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libReducersApp = __webpack_require__(188);
+	var _libReducersApp = __webpack_require__(189);
 	
 	function checkForGraphite() {
 	  return function (dispatch) {
@@ -24190,10 +24281,10 @@
 	    updateInterval: updateInterval
 	  };
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(186)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(187)))
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*** IMPORTS FROM imports-loader ***/
@@ -24536,7 +24627,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24564,7 +24655,7 @@
 	exports.VIEW_GRAPH_SET = VIEW_GRAPH_SET;
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24576,7 +24667,7 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _libConstantsActionTypes = __webpack_require__(187);
+	var _libConstantsActionTypes = __webpack_require__(188);
 	
 	var actionTypes = _interopRequireWildcard(_libConstantsActionTypes);
 	
@@ -24586,7 +24677,7 @@
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libConstantsGraphSets = __webpack_require__(179);
+	var _libGraphSets = __webpack_require__(179);
 	
 	var initialAppState = {
 	  error: null,
@@ -24597,7 +24688,7 @@
 	  graphImageNonce: (0, _libUtils.genId)(),
 	  // reference to setInterval() instance.
 	  graphReloaderInterval: null,
-	  graphSet: _libConstantsGraphSets.graphSetList[0].key,
+	  graphSet: _libGraphSets.graphSetList[0].key,
 	  timeSlice: graphite.LAST_15_MIN
 	};
 	
@@ -24652,7 +24743,7 @@
 	}
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24722,7 +24813,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24757,7 +24848,7 @@
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libConstantsGraphSets = __webpack_require__(179);
+	var _libGraphSets = __webpack_require__(179);
 	
 	var Navigation = (function (_Component) {
 	  _inherits(Navigation, _Component);
@@ -24792,7 +24883,7 @@
 	        'select',
 	        { key: 'graph-set', value: this.props.currentGraphSet,
 	          onChange: this.onChangeGraphSet },
-	        _libConstantsGraphSets.graphSetList.map(function (set) {
+	        _libGraphSets.graphSetList.map(function (set) {
 	          return _react2['default'].createElement(
 	            'option',
 	            { value: set.key },
@@ -24864,7 +24955,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24933,7 +25024,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24947,11 +25038,11 @@
 	
 	var _redux = __webpack_require__(165);
 	
-	var _reduxThunk = __webpack_require__(193);
+	var _reduxThunk = __webpack_require__(194);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reducers = __webpack_require__(194);
+	var _reducers = __webpack_require__(195);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -24991,7 +25082,7 @@
 	exports['default'] = createReduxStore();
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25013,7 +25104,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25026,7 +25117,7 @@
 	
 	var _redux = __webpack_require__(165);
 	
-	var _app = __webpack_require__(188);
+	var _app = __webpack_require__(189);
 	
 	var _app2 = _interopRequireDefault(_app);
 	

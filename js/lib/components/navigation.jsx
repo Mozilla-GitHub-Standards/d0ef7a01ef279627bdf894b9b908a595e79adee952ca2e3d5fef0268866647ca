@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import * as graphite from 'lib/utils/graphite';
 import { gettext } from 'lib/utils';
-import { graphSetList } from 'lib/constants/graph-sets';
+import { graphSetList } from 'lib/graph-sets';
 
 
 export default class Navigation extends Component {
