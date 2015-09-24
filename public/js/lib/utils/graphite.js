@@ -25,6 +25,9 @@ export function url(params) {
   var query = '';
   Object.keys(params).forEach(key => {
     var val = params[key];
+    if (typeof val === 'undefined') {
+      throw new Error('no URL params can be undefined. Check the key: ' + key);
+    }
     if (val instanceof Array) {
       // Graphite wants to receive repeating params like
       // target=...&target=...

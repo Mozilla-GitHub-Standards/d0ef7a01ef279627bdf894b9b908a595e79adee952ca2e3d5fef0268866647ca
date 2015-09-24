@@ -16,11 +16,11 @@ export default class AddonLifecycle extends Component {
     return (
       <div>
         <Graph title={gettext("All Add-on Status Changes")}
-          getUrl={graphite.allAddonStatusChangesUrl} {...graphProps} />
+          getUrl={graphite.allAddonStatusChangesUrl} graphProps={graphProps} />
         <Graph title={gettext("Listed Add-on Status Changes")}
-          getUrl={graphite.listedAddonStatusChangesUrl} {...graphProps} />
+          getUrl={graphite.listedAddonStatusChangesUrl} graphProps={graphProps} />
         <Graph title={gettext("Unlisted Add-on Status Changes")}
-          getUrl={graphite.unlistedAddonStatusChangesUrl} {...graphProps} />
+          getUrl={graphite.unlistedAddonStatusChangesUrl} graphProps={graphProps} />
       </div>
     );
   }

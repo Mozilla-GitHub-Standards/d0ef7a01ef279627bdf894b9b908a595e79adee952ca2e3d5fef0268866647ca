@@ -16,7 +16,7 @@ export default class AuthResponses extends Component {
     return (
       <div>
         <Graph title={gettext("% of Auth'd Responses")}
-          getUrl={graphite.authResponseCountUrl} {...graphProps} />
+          getUrl={graphite.authResponseCountUrl} graphProps={graphProps} />
       </div>
     );
   }
