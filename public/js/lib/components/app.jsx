@@ -5,7 +5,7 @@ import { debounce } from 'underscore';
 import cx from 'classnames';
 
 import { addVisibilityHandler, gettext } from 'lib/utils';
-import { getGraphSet } from 'lib/constants/graph-sets';
+import { getGraphSet } from 'lib/graph-sets';
 import * as graphite from 'lib/utils/graphite';
 import * as appActions from 'lib/actions/app-actions'
 import Error from 'lib/components/error';

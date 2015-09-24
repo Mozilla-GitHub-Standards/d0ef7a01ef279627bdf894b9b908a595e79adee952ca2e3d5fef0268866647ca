@@ -1,7 +1,7 @@
 import * as actionTypes from 'lib/constants/action-types';
 import * as graphite from 'lib/utils/graphite';
 import { genId } from 'lib/utils';
-import { graphSetList } from 'lib/constants/graph-sets';
+import { graphSetList } from 'lib/graph-sets';
 
 
 export const initialAppState = {

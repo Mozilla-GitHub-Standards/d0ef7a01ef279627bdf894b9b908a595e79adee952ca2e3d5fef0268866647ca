@@ -1,8 +1,8 @@
 import { gettext } from 'lib/utils';
 
-import AddonLifecycle from 'lib/components/addon-lifecycle';
-import AuthResponses from 'lib/components/auth-responses';
-import SitePerformance from 'lib/components/site-perf';
+import AddonLifecycle from './addon-lifecycle';
+import AuthResponses from './auth-responses';
+import SitePerformance from './site-perf';
 
 var registry = {};
 
