@@ -25,6 +25,9 @@ export function url(params) {
   var query = '';
   Object.keys(params).forEach(key => {
     var val = params[key];
+    if (typeof val === 'undefined') {
+      throw new Error('no URL params can be undefined. Check the key: ' + key);
+    }
     if (val instanceof Array) {
       // Graphite wants to receive repeating params like
       // target=...&target=...
@@ -119,4 +122,50 @@ export function redirectsAndErrorsUrl({...params} = {}) {
     ],
     ...params,
   });
+}
+
+
+export function allAddonStatusChangesUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: addonStatusChangeTargets('all'),
+    ...params,
+  });
+}
+
+
+export function listedAddonStatusChangesUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: addonStatusChangeTargets('listed'),
+    ...params,
+  });
+}
+
+
+export function unlistedAddonStatusChangesUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: addonStatusChangeTargets('unlisted'),
+    ...params,
+  });
+}
+
+
+function addonStatusChangeTargets(statType) {
+  var targets = [
+    'sumSeries(stats.addons.addon_status_change.{statType}.*)',
+    // Legend: github.com/mozilla/olympia/.../apps/constants/base.py
+    'stats.addons.addon_status_change.{statType}.status_0',
+    'stats.addons.addon_status_change.{statType}.status_1',
+    'stats.addons.addon_status_change.{statType}.status_2',
+    'stats.addons.addon_status_change.{statType}.status_3',
+    'stats.addons.addon_status_change.{statType}.status_4',
+    'stats.addons.addon_status_change.{statType}.status_7',
+    'stats.addons.addon_status_change.{statType}.status_8',
+    'stats.addons.addon_status_change.{statType}.status_9',
+    'stats.addons.addon_status_change.{statType}.status_12',
+    'stats.addons.addon_status_change.{statType}.status_14',
+  ];
+  return targets.map(t => t.replace('{statType}', statType));
 }

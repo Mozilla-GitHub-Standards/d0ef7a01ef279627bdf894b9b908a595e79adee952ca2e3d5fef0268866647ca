@@ -8,11 +8,8 @@ export default class Graph extends Component {
 
   static propTypes = {
     // When this value changes, React will reload the images.
-    nonce: PropTypes.string.isRequired,
     getUrl: PropTypes.func.isRequired,
-    width: PropTypes.integer,
-    height: PropTypes.integer,
-    timeSlice: PropTypes.string.isRequired,
+    graphProps: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
   }
 
@@ -22,22 +19,20 @@ export default class Graph extends Component {
   }
 
   render() {
-    var { width, height, title, ...props } = this.props;
+    var graphProps = Object.assign({
+      width: 580,
+      height: 308,
+    }, this.props.graphProps);
 
-    var graphUrl = this.props.getUrl({
-      'from': props.timeSlice,
-      width: width,
-      height: height,
-      title: title,
-      // Maybe there is a better way to do this? Without a new URL,
-      // React won't let the image reload. In other words: it would be
-      // better to rely on the browser cache rather than this.
-      _nonce: props.nonce,
-    });
+    graphProps.title = this.props.title;
+    graphProps['from'] = graphProps.timeSlice;
+    delete graphProps.timeSlice;
+
+    var graphUrl = this.props.getUrl(graphProps);
 
     return (
-      <img className={cx('graph')} width={width} height={height}
-        src={graphUrl} />
+      <img className={cx('graph')} width={graphProps.width}
+        height={graphProps.height} src={graphUrl} />
     );
   }
 
