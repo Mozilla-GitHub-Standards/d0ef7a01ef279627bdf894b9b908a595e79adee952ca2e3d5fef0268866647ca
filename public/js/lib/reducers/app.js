@@ -1,6 +1,7 @@
-import * as actionTypes from 'lib/action-types';
+import * as actionTypes from 'lib/constants/action-types';
 import * as graphite from 'lib/utils/graphite';
 import { genId } from 'lib/utils';
+import { graphSetList } from 'lib/constants/graph-sets';
 
 
 export const initialAppState = {
@@ -12,6 +13,7 @@ export const initialAppState = {
   graphImageNonce: genId(),
   // reference to setInterval() instance.
   graphReloaderInterval: null,
+  graphSet: graphSetList[0].key,
   timeSlice: graphite.LAST_15_MIN,
 };
 
@@ -54,6 +56,10 @@ export default function app(state, action) {
     case actionTypes.SET_TIME_SLICE:
       return Object.assign({}, state, {
         timeSlice: action.timeSlice,
+      });
+    case actionTypes.VIEW_GRAPH_SET:
+      return Object.assign({}, state, {
+        graphSet: action.graphSet,
       });
     default:
       return state || initialAppState;
