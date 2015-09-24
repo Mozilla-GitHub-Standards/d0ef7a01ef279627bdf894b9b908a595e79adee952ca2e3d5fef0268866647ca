@@ -13,6 +13,9 @@ export default class AddonLifecycle extends Component {
 
   render() {
     var graphProps = this.props.graphProps;
+    graphProps.areaMode = 'stacked';
+    //graphProps.lineMode = 'connected';
+
     return (
       <div>
         <Graph title={gettext("All Add-on Status Changes")}
