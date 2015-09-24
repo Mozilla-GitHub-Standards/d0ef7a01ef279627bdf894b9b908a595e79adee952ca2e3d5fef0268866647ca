@@ -1,7 +1,8 @@
 import { gettext } from 'lib/utils';
 
-import SitePerformance from 'lib/components/site-perf';
+import AddonLifecycle from 'lib/components/addon-lifecycle';
 import AuthResponses from 'lib/components/auth-responses';
+import SitePerformance from 'lib/components/site-perf';
 
 var registry = {};
 
@@ -22,6 +23,11 @@ export var graphSetList = [
     key: 'site-performance',
     name: gettext('Site Performance'),
     component: SitePerformance,
+  }),
+  register({
+    key: 'addon-lifecycle',
+    name: gettext('Add-on Lifecycle'),
+    component: AddonLifecycle,
   }),
   register({
     key: 'auth-requests',
