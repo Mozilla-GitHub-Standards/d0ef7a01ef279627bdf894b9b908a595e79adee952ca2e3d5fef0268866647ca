@@ -9,6 +9,7 @@ This is a private Mozilla dashboard to view health and performance stats for
 
 The dashboard can be viewed here on Github Pages:
 [http://mozilla.github.io/amo-dashboard/](http://mozilla.github.io/amo-dashboard/)
+(requires that you're on the [Mozilla VPN](https://mana.mozilla.org/wiki/display/SD/VPN)).
 
 ## Installation
 
