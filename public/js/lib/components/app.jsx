@@ -104,7 +104,7 @@ export class App extends Component {
       var graphProps = {
         width: graphWidth,
         height: graphHeight,
-        timeSlice: this.props.app.timeSlice,
+        'from': this.props.app.timeSlice,
         // Maybe there is a better way to do this? Without a new URL,
         // React won't let the image reload. In other words: it would be
         // better to rely on the browser cache rather than this.

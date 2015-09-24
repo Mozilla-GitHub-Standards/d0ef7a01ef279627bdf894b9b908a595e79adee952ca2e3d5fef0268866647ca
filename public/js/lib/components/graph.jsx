@@ -25,8 +25,6 @@ export default class Graph extends Component {
     }, this.props.graphProps);
 
     graphProps.title = this.props.title;
-    graphProps['from'] = graphProps.timeSlice;
-    delete graphProps.timeSlice;
 
     var graphUrl = this.props.getUrl(graphProps);
 
