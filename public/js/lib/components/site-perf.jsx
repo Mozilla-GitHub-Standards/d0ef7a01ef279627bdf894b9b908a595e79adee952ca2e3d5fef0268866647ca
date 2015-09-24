@@ -15,12 +15,12 @@ export default class SitePerf extends Component {
     var graphProps = this.props.graphProps;
     return (
       <div>
-        <Graph title={gettext("Response Count")}
-          getUrl={graphite.responseCountUrl} {...graphProps} />
         <Graph title={gettext("Response Times")}
           getUrl={graphite.responseTimesUrl} {...graphProps} />
         <Graph title={gettext("Search Times")}
           getUrl={graphite.searchTimesUrl} {...graphProps} />
+        <Graph title={gettext("Response Count")}
+          getUrl={graphite.responseCountUrl} {...graphProps} />
         <Graph title={gettext("Redirects and Errors")}
           getUrl={graphite.redirectsAndErrorsUrl} {...graphProps} />
       </div>
