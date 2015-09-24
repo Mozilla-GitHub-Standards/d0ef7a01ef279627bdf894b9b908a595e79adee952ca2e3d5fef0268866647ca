@@ -165,6 +165,31 @@ export function addonValidationTimesUrl({...params} = {}) {
 }
 
 
+export function addonGUIDSearchTimeUrl({...params} = {}) {
+  return url({
+    vtitle: 'milleseconds',
+    target: [
+      'stats.timers.addons.view.api.views.guid_search.GET.lower',
+      'stats.timers.addons.view.api.views.guid_search.GET.mean',
+      'stats.timers.addons.view.api.views.guid_search.GET.upper_90',
+      'scale(stats.timers.addons.view.api.views.guid_search.GET.count(0.01)',
+    ],
+    ...params,
+  });
+}
+
+
+export function addonGUIDSearchCountUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: [
+      'scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)'
+    ],
+    ...params,
+  });
+}
+
+
 function addonStatusChangeTargets(statType) {
   var targets = [
     'sumSeries(stats.addons.addon_status_change.{statType}.*)',
