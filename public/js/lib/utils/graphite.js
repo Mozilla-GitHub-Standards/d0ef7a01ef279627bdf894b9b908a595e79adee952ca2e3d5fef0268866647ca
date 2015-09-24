@@ -152,6 +152,19 @@ export function unlistedAddonStatusChangesUrl({...params} = {}) {
 }
 
 
+export function addonValidationTimesUrl({...params} = {}) {
+  return url({
+    vtitle: 'milleseconds',
+    target: [
+      'stats.timers.addons.devhub.validator.lower',
+      'stats.timers.addons.devhub.validator.mean',
+      'stats.timers.addons.devhub.validator.upper_90',
+    ],
+    ...params,
+  });
+}
+
+
 function addonStatusChangeTargets(statType) {
   var targets = [
     'sumSeries(stats.addons.addon_status_change.{statType}.*)',

@@ -3,6 +3,7 @@ import { gettext } from 'lib/utils';
 import AddonLifecycle from './addon-lifecycle';
 import AuthResponses from './auth-responses';
 import SitePerformance from './site-perf';
+import ValidatorPerf from './validator-perf';
 
 var registry = {};
 
@@ -28,6 +29,11 @@ export var graphSetList = [
     key: 'addon-lifecycle',
     name: gettext('Add-on Lifecycle'),
     component: AddonLifecycle,
+  }),
+  register({
+    key: 'validator-perf',
+    name: gettext('Add-on Validation'),
+    component: ValidatorPerf,
   }),
   register({
     key: 'auth-requests',
