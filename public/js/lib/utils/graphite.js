@@ -56,7 +56,6 @@ export function responseCountUrl({...params} = {}) {
       'stats.addons.response.404',
       'stats.addons.response.405',
       'stats.addons.response.500',
-      deployMarker(),
     ],
     ...params,
   });
@@ -69,7 +68,6 @@ export function authResponseCountUrl({...params} = {}) {
     target: [
       'stats.addons.response.auth.200',
       'scale(stats.addons.response.200,0.1)',
-      deployMarker(),
     ],
     ...params,
   });
@@ -185,11 +183,11 @@ export function addonGUIDSearchTimeUrl({...params} = {}) {
 
 
 export function addonGUIDSearchCountUrl({...params} = {}) {
+  // Is this graph really a count? Hmmm. It's from the old dashboard.
   return url({
     vtitle: 'count',
     target: [
       'scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)',
-      deployMarker(),
     ],
     ...params,
   });
