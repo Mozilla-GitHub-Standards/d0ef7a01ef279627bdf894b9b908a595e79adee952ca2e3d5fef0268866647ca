@@ -19,11 +19,6 @@ export class App extends Component {
   static propTypes = {
     app: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    window: PropTypes.object,
-  }
-
-  static defaultProps = {
-    window: window,
   }
 
   constructor(props) {
@@ -51,12 +46,11 @@ export class App extends Component {
   }
 
   setPanelSize = () => {
-    var win = this.props.window;
     var width;
 
-    if (win.clientWidth) {
+    if (window.clientWidth) {
       console.log('setting panel size from clientWidth');
-      width = win.clientWidth;
+      width = window.clientWidth;
     } else {
       var hasVScroll;
       var cStyle = (document.body.currentStyle ||
@@ -71,9 +65,9 @@ export class App extends Component {
                      || (hasVScroll && cStyle.overflowY == "auto");
       }
       console.log('guessing inner width from CSS padding; innerWidth:',
-                  win.innerWidth);
+                  window.innerWidth);
       var horizontalMargin = 40;  // matches padding * 2 from _base.scss
-      width = (win.innerWidth - horizontalMargin)
+      width = (window.innerWidth - horizontalMargin)
       if (hasVScroll) {
         console.log('adjusting width for scollbars');
         width = width - 15;
@@ -82,11 +76,18 @@ export class App extends Component {
 
     this.boundAppActions.setPanelSize({
       width: width,
-      height: win.clientHeight || win.innerHeight,
+      height: window.clientHeight || window.innerHeight,
     });
   }
 
   render() {
+    if (window.location.protocol && window.location.protocol === 'https:') {
+      // The graph server has a self-signed cert so it just fails to load.
+      var msg = gettext(
+          'The internally hosted graph server cannot be accessed via HTTPS ' +
+          'at this time. Edit the URL to HTTP.');
+      return <Error message={msg} />;
+    }
     if (this.props.app.error) {
       return <Error message={this.props.app.error} />;
     } else if (!this.props.app.panelSize.width) {

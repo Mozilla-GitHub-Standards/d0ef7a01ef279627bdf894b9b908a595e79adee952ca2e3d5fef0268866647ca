@@ -58,7 +58,7 @@
 	
 	var _libComponentsApp2 = _interopRequireDefault(_libComponentsApp);
 	
-	var _libDataStore = __webpack_require__(194);
+	var _libDataStore = __webpack_require__(195);
 	
 	var _libDataStore2 = _interopRequireDefault(_libDataStore);
 	
@@ -21666,11 +21666,11 @@
 	
 	var graphite = _interopRequireWildcard(_libUtilsGraphite);
 	
-	var _libActionsAppActions = __webpack_require__(187);
+	var _libActionsAppActions = __webpack_require__(188);
 	
 	var appActions = _interopRequireWildcard(_libActionsAppActions);
 	
-	var _libComponentsError = __webpack_require__(191);
+	var _libComponentsError = __webpack_require__(192);
 	
 	var _libComponentsError2 = _interopRequireDefault(_libComponentsError);
 	
@@ -21678,11 +21678,11 @@
 	
 	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
 	
-	var _libComponentsNavigation = __webpack_require__(192);
+	var _libComponentsNavigation = __webpack_require__(193);
 	
 	var _libComponentsNavigation2 = _interopRequireDefault(_libComponentsNavigation);
 	
-	var _libComponentsSpinner = __webpack_require__(193);
+	var _libComponentsSpinner = __webpack_require__(194);
 	
 	var _libComponentsSpinner2 = _interopRequireDefault(_libComponentsSpinner);
 	
@@ -21693,14 +21693,7 @@
 	    key: 'propTypes',
 	    value: {
 	      app: _react.PropTypes.object.isRequired,
-	      dispatch: _react.PropTypes.func.isRequired,
-	      window: _react.PropTypes.object
-	    },
-	    enumerable: true
-	  }, {
-	    key: 'defaultProps',
-	    value: {
-	      window: window
+	      dispatch: _react.PropTypes.func.isRequired
 	    },
 	    enumerable: true
 	  }]);
@@ -21713,12 +21706,11 @@
 	    _get(Object.getPrototypeOf(App.prototype), 'constructor', this).call(this, props);
 	
 	    this.setPanelSize = function () {
-	      var win = _this.props.window;
 	      var width;
 	
-	      if (win.clientWidth) {
+	      if (window.clientWidth) {
 	        console.log('setting panel size from clientWidth');
-	        width = win.clientWidth;
+	        width = window.clientWidth;
 	      } else {
 	        var hasVScroll;
 	        var cStyle = document.body.currentStyle || window.getComputedStyle(document.body, "");
@@ -21728,9 +21720,9 @@
 	          // for "auto" and "visible" values
 	          hasVScroll = cStyle.overflow == "visible" || cStyle.overflowY == "visible" || hasVScroll && cStyle.overflow == "auto" || hasVScroll && cStyle.overflowY == "auto";
 	        }
-	        console.log('guessing inner width from CSS padding; innerWidth:', win.innerWidth);
+	        console.log('guessing inner width from CSS padding; innerWidth:', window.innerWidth);
 	        var horizontalMargin = 40; // matches padding * 2 from _base.scss
-	        width = win.innerWidth - horizontalMargin;
+	        width = window.innerWidth - horizontalMargin;
 	        if (hasVScroll) {
 	          console.log('adjusting width for scollbars');
 	          width = width - 15;
@@ -21739,7 +21731,7 @@
 	
 	      _this.boundAppActions.setPanelSize({
 	        width: width,
-	        height: win.clientHeight || win.innerHeight
+	        height: window.clientHeight || window.innerHeight
 	      });
 	    };
 	
@@ -21768,6 +21760,11 @@
 	  _createClass(App, [{
 	    key: 'render',
 	    value: function render() {
+	      if (window.location.protocol && window.location.protocol === 'https:') {
+	        // The graph server has a self-signed cert so it just fails to load.
+	        var msg = (0, _libUtils.gettext)('The internally hosted graph server cannot be accessed via HTTPS ' + 'at this time. Edit the URL to HTTP.');
+	        return _react2['default'].createElement(_libComponentsError2['default'], { message: msg });
+	      }
 	      if (this.props.app.error) {
 	        return _react2['default'].createElement(_libComponentsError2['default'], { message: this.props.app.error });
 	      } else if (!this.props.app.panelSize.width) {
@@ -23519,11 +23516,15 @@
 	
 	var _guidSearch2 = _interopRequireDefault(_guidSearch);
 	
-	var _sitePerf = __webpack_require__(185);
+	var _searchPerf = __webpack_require__(185);
+	
+	var _searchPerf2 = _interopRequireDefault(_searchPerf);
+	
+	var _sitePerf = __webpack_require__(186);
 	
 	var _sitePerf2 = _interopRequireDefault(_sitePerf);
 	
-	var _validatorPerf = __webpack_require__(186);
+	var _validatorPerf = __webpack_require__(187);
 	
 	var _validatorPerf2 = _interopRequireDefault(_validatorPerf);
 	
@@ -23538,10 +23539,15 @@
 	  return set;
 	}
 	
+	// The graph set navigation menu will show items in this exact order.
 	var graphSetList = [register({
 	  key: 'site-performance',
 	  name: (0, _libUtils.gettext)('Site Performance'),
 	  component: _sitePerf2['default']
+	}), register({
+	  key: 'search-performance',
+	  name: (0, _libUtils.gettext)('Search Performance'),
+	  component: _searchPerf2['default']
 	}), register({
 	  key: 'addon-lifecycle',
 	  name: (0, _libUtils.gettext)('Add-on Lifecycle'),
@@ -23721,7 +23727,7 @@
 	
 	  return url(_extends({
 	    vtitle: 'count',
-	    target: ['sumSeries(stats.addons.response.*)', 'stats.addons.response.200', 'stats.addons.response.301', 'stats.addons.response.302', 'stats.addons.response.403', 'stats.addons.response.404', 'stats.addons.response.405', 'stats.addons.response.500', 'drawAsInfinite(stats.timers.addons.update.count)']
+	    target: ['sumSeries(stats.addons.response.*)', 'stats.addons.response.200', 'stats.addons.response.301', 'stats.addons.response.302', 'stats.addons.response.403', 'stats.addons.response.404', 'stats.addons.response.405', 'stats.addons.response.500']
 	  }, params));
 	}
 	
@@ -23743,7 +23749,7 @@
 	
 	  return url(_extends({
 	    vtitle: 'milleseconds',
-	    target: ['stats.timers.addons.view.GET.lower', 'stats.timers.addons.view.GET.mean', 'stats.timers.addons.view.GET.upper_90']
+	    target: ['stats.timers.addons.view.GET.lower', 'stats.timers.addons.view.GET.mean', 'stats.timers.addons.view.GET.upper_90', deployMarker()]
 	  }, params));
 	}
 	
@@ -23754,7 +23760,7 @@
 	
 	  return url(_extends({
 	    vtitle: 'milleseconds',
-	    target: ['stats.timers.addons.view.search.views.search.GET.lower', 'stats.timers.addons.search.raw.lower', 'stats.timers.addons.view.search.views.search.GET.mean', 'stats.timers.addons.search.raw.mean', 'stats.timers.addons.view.search.views.search.GET.upper_90', 'stats.timers.addons.search.raw.upper_90', 'scale(stats.timers.addons.view.search.views.search.GET.count,0.1)', 'scale(stats.timers.addons.search.raw.count,0.1)']
+	    target: ['stats.timers.addons.view.search.views.search.GET.lower', 'stats.timers.addons.search.raw.lower', 'stats.timers.addons.view.search.views.search.GET.mean', 'stats.timers.addons.search.raw.mean', 'stats.timers.addons.view.search.views.search.GET.upper_90', 'stats.timers.addons.search.raw.upper_90', 'scale(stats.timers.addons.view.search.views.search.GET.count,0.1)', 'scale(stats.timers.addons.search.raw.count,0.1)', deployMarker()]
 	  }, params));
 	}
 	
@@ -23765,7 +23771,7 @@
 	
 	  return url(_extends({
 	    vtitle: 'count',
-	    target: ['stats.addons.response.301', 'stats.addons.response.302', 'stats.addons.response.304', 'stats.addons.response.400', 'stats.addons.response.403', 'stats.addons.response.404', 'stats.addons.response.405', 'stats.addons.response.500', 'stats.addons.response.503']
+	    target: ['stats.addons.response.301', 'stats.addons.response.302', 'stats.addons.response.304', 'stats.addons.response.400', 'stats.addons.response.403', 'stats.addons.response.404', 'stats.addons.response.405', 'stats.addons.response.500', 'stats.addons.response.503', deployMarker()]
 	  }, params));
 	}
 	
@@ -23820,7 +23826,7 @@
 	
 	  return url(_extends({
 	    vtitle: 'milleseconds',
-	    target: ['stats.timers.addons.view.api.views.guid_search.GET.lower', 'stats.timers.addons.view.api.views.guid_search.GET.mean', 'stats.timers.addons.view.api.views.guid_search.GET.upper_90', 'scale(stats.timers.addons.view.api.views.guid_search.GET.count(0.01)']
+	    target: ['stats.timers.addons.view.api.views.guid_search.GET.lower', 'stats.timers.addons.view.api.views.guid_search.GET.mean', 'stats.timers.addons.view.api.views.guid_search.GET.upper_90', 'scale(stats.timers.addons.view.api.views.guid_search.GET.count(0.01)', deployMarker()]
 	  }, params));
 	}
 	
@@ -23829,6 +23835,7 @@
 	
 	  var params = _objectWithoutProperties(_ref11, []);
 	
+	  // Is this graph really a count? Hmmm. It's from the old dashboard.
 	  return url(_extends({
 	    vtitle: 'count',
 	    target: ['scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)']
@@ -23842,6 +23849,14 @@
 	  return targets.map(function (t) {
 	    return t.replace('{statType}', statType);
 	  });
+	}
+	
+	/*
+	 * Returns a target property that draws a vertical line when the
+	 * site is deployed.
+	 */
+	function deployMarker() {
+	  return 'drawAsInfinite(stats.timers.addons.update.count)';
 	}
 
 /***/ },
@@ -24105,6 +24120,76 @@
 	
 	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
 	
+	var SearchPerformance = (function (_Component) {
+	  _inherits(SearchPerformance, _Component);
+	
+	  function SearchPerformance() {
+	    _classCallCheck(this, SearchPerformance);
+	
+	    _get(Object.getPrototypeOf(SearchPerformance.prototype), 'constructor', this).apply(this, arguments);
+	  }
+	
+	  _createClass(SearchPerformance, [{
+	    key: 'render',
+	    value: function render() {
+	      var graphProps = this.props.graphProps;
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Search Times"),
+	          getUrl: graphite.searchTimesUrl, graphProps: graphProps })
+	      );
+	    }
+	  }], [{
+	    key: 'propTypes',
+	    value: {
+	      graphProps: _react.PropTypes.object.isRequired
+	    },
+	    enumerable: true
+	  }]);
+	
+	  return SearchPerformance;
+	})(_react.Component);
+	
+	exports['default'] = SearchPerformance;
+	module.exports = exports['default'];
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _libUtils = __webpack_require__(178);
+	
+	var _libUtilsGraphite = __webpack_require__(181);
+	
+	var graphite = _interopRequireWildcard(_libUtilsGraphite);
+	
+	var _libComponentsGraph = __webpack_require__(182);
+	
+	var _libComponentsGraph2 = _interopRequireDefault(_libComponentsGraph);
+	
 	var SitePerf = (function (_Component) {
 	  _inherits(SitePerf, _Component);
 	
@@ -24123,8 +24208,6 @@
 	        null,
 	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Response Times"),
 	          getUrl: graphite.responseTimesUrl, graphProps: graphProps }),
-	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Search Times"),
-	          getUrl: graphite.searchTimesUrl, graphProps: graphProps }),
 	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Response Count"),
 	          getUrl: graphite.responseCountUrl, graphProps: graphProps }),
 	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Redirects and Errors"),
@@ -24146,7 +24229,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24217,7 +24300,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(fetch) {'use strict';
@@ -24238,7 +24321,7 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _libConstantsActionTypes = __webpack_require__(189);
+	var _libConstantsActionTypes = __webpack_require__(190);
 	
 	var actionTypes = _interopRequireWildcard(_libConstantsActionTypes);
 	
@@ -24248,7 +24331,7 @@
 	
 	var _libUtils = __webpack_require__(178);
 	
-	var _libReducersApp = __webpack_require__(190);
+	var _libReducersApp = __webpack_require__(191);
 	
 	function checkForGraphite() {
 	  return function (dispatch) {
@@ -24386,10 +24469,10 @@
 	    updateInterval: updateInterval
 	  };
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(188)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(189)))
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*** IMPORTS FROM imports-loader ***/
@@ -24732,7 +24815,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24760,7 +24843,7 @@
 	exports.VIEW_GRAPH_SET = VIEW_GRAPH_SET;
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24772,7 +24855,7 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _libConstantsActionTypes = __webpack_require__(189);
+	var _libConstantsActionTypes = __webpack_require__(190);
 	
 	var actionTypes = _interopRequireWildcard(_libConstantsActionTypes);
 	
@@ -24848,7 +24931,7 @@
 	}
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24918,7 +25001,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25060,7 +25143,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25129,7 +25212,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25143,11 +25226,11 @@
 	
 	var _redux = __webpack_require__(165);
 	
-	var _reduxThunk = __webpack_require__(195);
+	var _reduxThunk = __webpack_require__(196);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reducers = __webpack_require__(196);
+	var _reducers = __webpack_require__(197);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -25187,7 +25270,7 @@
 	exports['default'] = createReduxStore();
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25209,7 +25292,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25222,7 +25305,7 @@
 	
 	var _redux = __webpack_require__(165);
 	
-	var _app = __webpack_require__(190);
+	var _app = __webpack_require__(191);
 	
 	var _app2 = _interopRequireDefault(_app);
 	

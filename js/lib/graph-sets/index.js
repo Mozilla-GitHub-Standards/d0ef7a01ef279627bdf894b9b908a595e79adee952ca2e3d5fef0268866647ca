@@ -3,6 +3,7 @@ import { gettext } from 'lib/utils';
 import AddonLifecycle from './addon-lifecycle';
 import AuthResponses from './auth-responses';
 import GUIDSearch from './guid-search';
+import SearchPerformance from './search-perf';
 import SitePerformance from './site-perf';
 import ValidatorPerf from './validator-perf';
 
@@ -20,11 +21,17 @@ function register(set) {
 }
 
 
+// The graph set navigation menu will show items in this exact order.
 export var graphSetList = [
   register({
     key: 'site-performance',
     name: gettext('Site Performance'),
     component: SitePerformance,
+  }),
+  register({
+    key: 'search-performance',
+    name: gettext('Search Performance'),
+    component: SearchPerformance,
   }),
   register({
     key: 'addon-lifecycle',

@@ -56,7 +56,6 @@ export function responseCountUrl({...params} = {}) {
       'stats.addons.response.404',
       'stats.addons.response.405',
       'stats.addons.response.500',
-      'drawAsInfinite(stats.timers.addons.update.count)',
     ],
     ...params,
   });
@@ -82,6 +81,7 @@ export function responseTimesUrl({...params} = {}) {
       'stats.timers.addons.view.GET.lower',
       'stats.timers.addons.view.GET.mean',
       'stats.timers.addons.view.GET.upper_90',
+      deployMarker(),
     ],
     ...params,
   });
@@ -100,6 +100,7 @@ export function searchTimesUrl({...params} = {}) {
       'stats.timers.addons.search.raw.upper_90',
       'scale(stats.timers.addons.view.search.views.search.GET.count,0.1)',
       'scale(stats.timers.addons.search.raw.count,0.1)',
+      deployMarker(),
     ],
     ...params,
   });
@@ -119,6 +120,7 @@ export function redirectsAndErrorsUrl({...params} = {}) {
       'stats.addons.response.405',
       'stats.addons.response.500',
       'stats.addons.response.503',
+      deployMarker(),
     ],
     ...params,
   });
@@ -173,6 +175,7 @@ export function addonGUIDSearchTimeUrl({...params} = {}) {
       'stats.timers.addons.view.api.views.guid_search.GET.mean',
       'stats.timers.addons.view.api.views.guid_search.GET.upper_90',
       'scale(stats.timers.addons.view.api.views.guid_search.GET.count(0.01)',
+      deployMarker(),
     ],
     ...params,
   });
@@ -180,10 +183,11 @@ export function addonGUIDSearchTimeUrl({...params} = {}) {
 
 
 export function addonGUIDSearchCountUrl({...params} = {}) {
+  // Is this graph really a count? Hmmm. It's from the old dashboard.
   return url({
     vtitle: 'count',
     target: [
-      'scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)'
+      'scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)',
     ],
     ...params,
   });
@@ -206,4 +210,13 @@ function addonStatusChangeTargets(statType) {
     'stats.addons.addon_status_change.{statType}.status_14',
   ];
   return targets.map(t => t.replace('{statType}', statType));
+}
+
+
+/*
+ * Returns a target property that draws a vertical line when the
+ * site is deployed.
+ */
+function deployMarker() {
+  return 'drawAsInfinite(stats.timers.addons.update.count)';
 }
