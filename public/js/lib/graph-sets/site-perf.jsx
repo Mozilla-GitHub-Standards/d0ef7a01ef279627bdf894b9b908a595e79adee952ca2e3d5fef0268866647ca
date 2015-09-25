@@ -17,8 +17,6 @@ export default class SitePerf extends Component {
       <div>
         <Graph title={gettext("Response Times")}
           getUrl={graphite.responseTimesUrl} graphProps={graphProps} />
-        <Graph title={gettext("Search Times")}
-          getUrl={graphite.searchTimesUrl} graphProps={graphProps} />
         <Graph title={gettext("Response Count")}
           getUrl={graphite.responseCountUrl} graphProps={graphProps} />
         <Graph title={gettext("Redirects and Errors")}
