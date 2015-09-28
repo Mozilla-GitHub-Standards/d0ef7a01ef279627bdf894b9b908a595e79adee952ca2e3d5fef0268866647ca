@@ -93,18 +93,8 @@ export class App extends Component {
     } else if (!this.props.app.panelSize.width) {
       return <Spinner text={gettext('Loading some hot graphs')} />;
     } else {
-      var graphHeight = this.props.app.graphHeight;
-      // Make a guess at how many columns they may want to see.
-      // TODO: make this configurable.
-      var columns = Math.round(this.props.app.panelSize.width / 700, 1);
-      var graphWidth = Math.floor(this.props.app.panelSize.width / columns);
-      console.log('grid columns:', columns,
-                  'panel width:', this.props.app.panelSize.width,
-                  'graph width:', graphWidth);
 
       var graphProps = {
-        width: graphWidth,
-        height: graphHeight,
         'from': this.props.app.timeSlice,
         // Maybe there is a better way to do this? Without a new URL,
         // React won't let the image reload. In other words: it would be

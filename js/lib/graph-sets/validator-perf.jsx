@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { gettext } from 'lib/utils';
 import * as graphite from 'lib/utils/graphite';
 import Graph from 'lib/components/graph';
+import GraphHolder from 'lib/components/graph-holder';
 
 
 export default class ValidatorPerf extends Component {
@@ -15,10 +16,10 @@ export default class ValidatorPerf extends Component {
     var graphProps = this.props.graphProps;
 
     return (
-      <div>
+      <GraphHolder>
         <Graph title={gettext("Add-on Validation Times")}
           getUrl={graphite.addonValidationTimesUrl} graphProps={graphProps} />
-      </div>
+      </GraphHolder>
     );
   }
 }
