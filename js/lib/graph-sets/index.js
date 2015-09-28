@@ -1,7 +1,6 @@
 import { gettext } from 'lib/utils';
 
 import AddonLifecycle from './addon-lifecycle';
-import AuthResponses from './auth-responses';
 import GUIDSearch from './guid-search';
 import SearchPerformance from './search-perf';
 import SitePerformance from './site-perf';
@@ -47,10 +46,5 @@ export var graphSetList = [
     key: 'guid-search',
     name: gettext('Add-on GUID Search'),
     component: GUIDSearch,
-  }),
-  register({
-    key: 'auth-requests',
-    name: gettext('Authenticated Requests'),
-    component: AuthResponses,
   }),
 ];
