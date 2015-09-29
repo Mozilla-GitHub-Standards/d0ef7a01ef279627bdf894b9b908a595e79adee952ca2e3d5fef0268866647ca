@@ -167,6 +167,30 @@ export function addonValidationTimesUrl({...params} = {}) {
 }
 
 
+export function addonValidationCountUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: [
+      'summarize(stats.addons.devhub.validator.results.all.success, "1day", "max", true)',
+      'summarize(stats.addons.devhub.validator.results.all.failure, "1day", "max", true)',
+    ],
+    ...params,
+  });
+}
+
+
+export function autoSignableAddonCountUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: [
+      'summarize(stats.addons.devhub.validator.results.unlisted.is_signable, "1day", "max", true)',
+      'summarize(stats.addons.devhub.validator.results.unlisted.is_not_signable, "1day", "max", true)',
+    ],
+    ...params,
+  });
+}
+
+
 export function addonGUIDSearchTimeUrl({...params} = {}) {
   return url({
     vtitle: 'milleseconds',
