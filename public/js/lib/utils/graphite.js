@@ -238,5 +238,5 @@ function addonStatusChangeTargets(statType) {
  * site is deployed.
  */
 function deployMarker() {
-  return 'drawAsInfinite(stats.timers.addons.update.count)';
+  return 'alias(drawAsInfinite(stats.timers.addons.update.count), "Site deployment")';
 }
