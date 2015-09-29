@@ -171,8 +171,8 @@ export function addonValidationCountUrl({...params} = {}) {
   return url({
     vtitle: 'count',
     target: [
-      'summarize(stats_counts.addons.devhub.validator.results.all.success, "1day", "max", true)',
-      'summarize(stats_counts.addons.devhub.validator.results.all.failure, "1day", "max", true)',
+      'alias(summarize(stats_counts.addons.devhub.validator.results.all.success, "1day", "max", true), "All successes")',
+      'alias(summarize(stats_counts.addons.devhub.validator.results.all.failure, "1day", "max", true), "All failures")',
     ],
     ...params,
   });
@@ -183,8 +183,8 @@ export function autoSignableAddonCountUrl({...params} = {}) {
   return url({
     vtitle: 'count',
     target: [
-      'summarize(stats_counts.addons.devhub.validator.results.unlisted.is_signable, "1day", "max", true)',
-      'summarize(stats_counts.addons.devhub.validator.results.unlisted.is_not_signable, "1day", "max", true)',
+      'alias(summarize(stats_counts.addons.devhub.validator.results.unlisted.is_signable, "1day", "max", true), "Auto-signable")',
+      'alias(summarize(stats_counts.addons.devhub.validator.results.unlisted.is_not_signable, "1day", "max", true), "Not auto-signable")',
     ],
     ...params,
   });
