@@ -32,6 +32,11 @@ export default function app(state, action) {
         }),
       });
     case actionTypes.PAUSE_RELOADING_GRAPHS:
+      if (state.graphReloaderInterval) {
+        console.log('pausing graph reloader interval',
+                    state.graphReloaderInterval);
+        window.clearInterval(state.graphReloaderInterval);
+      }
       return Object.assign({}, state, {
         graphReloaderInterval: initialAppState.graphReloaderInterval,
       });
@@ -49,6 +54,11 @@ export default function app(state, action) {
         graphReloaderInterval: action.intervalRef,
       });
     case actionTypes.STOP_RELOADING_GRAPHS:
+      if (state.graphReloaderInterval) {
+        console.log('stopping graph reloader interval',
+                    state.graphReloaderInterval);
+        window.clearInterval(state.graphReloaderInterval);
+      }
       return Object.assign({}, state, {
         autoUpdateInterval: 0,
         graphReloaderInterval: initialAppState.graphReloaderInterval,

@@ -53,16 +53,8 @@ export function reloadGraphImages() {
 
 
 export function pauseGraphReloading() {
-  return (dispatch, getState) => {
-    var state = getState();
-    if (state.app.graphReloaderInterval) {
-      console.log('pausing graph reloader interval',
-                  state.app.graphReloaderInterval);
-      window.clearInterval(state.app.graphReloaderInterval);
-    }
-    dispatch({
-      type: actionTypes.PAUSE_RELOADING_GRAPHS,
-    });
+  return {
+    type: actionTypes.PAUSE_RELOADING_GRAPHS,
   };
 }
 
@@ -98,16 +90,8 @@ export function startReloadingGraphs() {
 
 
 export function stopReloadingGraphs() {
-  return (dispatch, getState) => {
-    var state = getState();
-    if (state.app.graphReloaderInterval) {
-      console.log('stopping graph reloader interval',
-                  state.app.graphReloaderInterval);
-      window.clearInterval(state.app.graphReloaderInterval);
-    }
-    dispatch({
-      type: actionTypes.STOP_RELOADING_GRAPHS,
-    });
+  return {
+    type: actionTypes.STOP_RELOADING_GRAPHS,
   };
 }
 
