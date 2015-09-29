@@ -21735,6 +21735,7 @@
 	      });
 	    };
 	
+	    this._isMounted = true;
 	    this.boundAppActions = (0, _redux.bindActionCreators)(appActions, props.dispatch);
 	
 	    if (props.app.autoUpdateInterval) {
@@ -21746,6 +21747,10 @@
 	    window.onresize = (0, _underscore.debounce)(this.setPanelSize, 300);
 	
 	    (0, _libUtils.addVisibilityHandler)(function (isVisible) {
+	      if (!_this._isMounted) {
+	        console.log('App component is not mounted');
+	        return;
+	      }
 	      if (_this.props.app.autoUpdateInterval) {
 	        if (isVisible) {
 	          _this.boundAppActions.reloadGraphImages(); // initial reload
@@ -21758,6 +21763,13 @@
 	  }
 	
 	  _createClass(App, [{
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      console.log('App component unmounted');
+	      this.boundAppActions.stopReloadingGraphs();
+	      this._isMounted = false;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      if (window.location.protocol && window.location.protocol === 'https:') {
@@ -21794,7 +21806,16 @@
 	            currentTimeSlice: this.props.app.timeSlice,
 	            currentGraphSet: this.props.app.graphSet
 	          }, this.boundAppActions)),
-	          _react2['default'].createElement(GraphSet, { graphProps: graphProps })
+	          _react2['default'].createElement(GraphSet, { graphProps: graphProps }),
+	          _react2['default'].createElement(
+	            'footer',
+	            null,
+	            _react2['default'].createElement(
+	              'a',
+	              { href: 'https://github.com/mozilla/amo-dashboard', target: '_blank' },
+	              (0, _libUtils.gettext)('Source code for this app')
+	            )
+	          )
 	        );
 	      }
 	    }
@@ -23654,6 +23675,8 @@
 	exports.listedAddonStatusChangesUrl = listedAddonStatusChangesUrl;
 	exports.unlistedAddonStatusChangesUrl = unlistedAddonStatusChangesUrl;
 	exports.addonValidationTimesUrl = addonValidationTimesUrl;
+	exports.addonValidationCountUrl = addonValidationCountUrl;
+	exports.autoSignableAddonCountUrl = autoSignableAddonCountUrl;
 	exports.addonGUIDSearchTimeUrl = addonGUIDSearchTimeUrl;
 	exports.addonGUIDSearchCountUrl = addonGUIDSearchCountUrl;
 	
@@ -23807,10 +23830,32 @@
 	  }, params));
 	}
 	
-	function addonGUIDSearchTimeUrl() {
+	function addonValidationCountUrl() {
 	  var _ref10 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
 	  var params = _objectWithoutProperties(_ref10, []);
+	
+	  return url(_extends({
+	    vtitle: 'count',
+	    target: ['alias(summarize(stats_counts.addons.devhub.validator.results.all.success, "1day", "max", true), "All successes")', 'alias(summarize(stats_counts.addons.devhub.validator.results.all.failure, "1day", "max", true), "All failures")']
+	  }, params));
+	}
+	
+	function autoSignableAddonCountUrl() {
+	  var _ref11 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	  var params = _objectWithoutProperties(_ref11, []);
+	
+	  return url(_extends({
+	    vtitle: 'count',
+	    target: ['alias(summarize(stats_counts.addons.devhub.validator.results.unlisted.is_signable, "1day", "max", true), "Auto-signable")', 'alias(summarize(stats_counts.addons.devhub.validator.results.unlisted.is_not_signable, "1day", "max", true), "Not auto-signable")']
+	  }, params));
+	}
+	
+	function addonGUIDSearchTimeUrl() {
+	  var _ref12 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	  var params = _objectWithoutProperties(_ref12, []);
 	
 	  return url(_extends({
 	    vtitle: 'milleseconds',
@@ -23819,9 +23864,9 @@
 	}
 	
 	function addonGUIDSearchCountUrl() {
-	  var _ref11 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var _ref13 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	  var params = _objectWithoutProperties(_ref11, []);
+	  var params = _objectWithoutProperties(_ref13, []);
 	
 	  // Is this graph really a count? Hmmm. It's from the old dashboard.
 	  return url(_extends({
@@ -23831,9 +23876,9 @@
 	}
 	
 	function addonStatusChangeTargets(statType) {
-	  var targets = ['sumSeries(stats.addons.addon_status_change.{statType}.*)',
+	  var targets = [
 	  // Legend: github.com/mozilla/olympia/.../apps/constants/base.py
-	  'stats.addons.addon_status_change.{statType}.status_0', 'stats.addons.addon_status_change.{statType}.status_1', 'stats.addons.addon_status_change.{statType}.status_2', 'stats.addons.addon_status_change.{statType}.status_3', 'stats.addons.addon_status_change.{statType}.status_4', 'stats.addons.addon_status_change.{statType}.status_7', 'stats.addons.addon_status_change.{statType}.status_8', 'stats.addons.addon_status_change.{statType}.status_9', 'stats.addons.addon_status_change.{statType}.status_12', 'stats.addons.addon_status_change.{statType}.status_14'];
+	  'alias(stats_counts.addons.addon_status_change.{statType}.status_0, "Incomplete")', 'alias(stats_counts.addons.addon_status_change.{statType}.status_1, "Unreviewed")', 'alias(stats_counts.addons.addon_status_change.{statType}.status_2, "Pending review")', 'alias(stats_counts.addons.addon_status_change.{statType}.status_3, "Pending full review")', 'alias(stats_counts.addons.addon_status_change.{statType}.status_4, "Public")', 'alias(stats_counts.addons.addon_status_change.{statType}.status_8, "Prelim. reviewed")', 'alias(stats_counts.addons.addon_status_change.{statType}.status_12, "Rejected")'];
 	  return targets.map(function (t) {
 	    return t.replace('{statType}', statType);
 	  });
@@ -23844,7 +23889,7 @@
 	 * site is deployed.
 	 */
 	function deployMarker() {
-	  return 'drawAsInfinite(stats.timers.addons.update.count)';
+	  return 'alias(drawAsInfinite(stats.timers.addons.update.count), "Site deployment")';
 	}
 
 /***/ },
@@ -24308,7 +24353,11 @@
 	        _libComponentsGraphHolder2['default'],
 	        null,
 	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Add-on Validation Times"),
-	          getUrl: graphite.addonValidationTimesUrl, graphProps: graphProps })
+	          getUrl: graphite.addonValidationTimesUrl, graphProps: graphProps }),
+	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Add-on Validation Count"),
+	          getUrl: graphite.addonValidationCountUrl, graphProps: graphProps }),
+	        _react2['default'].createElement(_libComponentsGraph2['default'], { title: (0, _libUtils.gettext)("Unlisted Auto-signable Validation Count"),
+	          getUrl: graphite.autoSignableAddonCountUrl, graphProps: graphProps })
 	      );
 	    }
 	  }], [{
@@ -24402,15 +24451,8 @@
 	}
 	
 	function pauseGraphReloading() {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    if (state.app.graphReloaderInterval) {
-	      console.log('pausing graph reloader interval', state.app.graphReloaderInterval);
-	      window.clearInterval(state.app.graphReloaderInterval);
-	    }
-	    dispatch({
-	      type: actionTypes.PAUSE_RELOADING_GRAPHS
-	    });
+	  return {
+	    type: actionTypes.PAUSE_RELOADING_GRAPHS
 	  };
 	}
 	
@@ -24448,15 +24490,8 @@
 	}
 	
 	function stopReloadingGraphs() {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    if (state.app.graphReloaderInterval) {
-	      console.log('stopping graph reloader interval', state.app.graphReloaderInterval);
-	      window.clearInterval(state.app.graphReloaderInterval);
-	    }
-	    dispatch({
-	      type: actionTypes.STOP_RELOADING_GRAPHS
-	    });
+	  return {
+	    type: actionTypes.STOP_RELOADING_GRAPHS
 	  };
 	}
 	
@@ -24922,6 +24957,10 @@
 	        })
 	      });
 	    case actionTypes.PAUSE_RELOADING_GRAPHS:
+	      if (state.graphReloaderInterval) {
+	        console.log('pausing graph reloader interval', state.graphReloaderInterval);
+	        window.clearInterval(state.graphReloaderInterval);
+	      }
 	      return Object.assign({}, state, {
 	        graphReloaderInterval: initialAppState.graphReloaderInterval
 	      });
@@ -24939,6 +24978,10 @@
 	        graphReloaderInterval: action.intervalRef
 	      });
 	    case actionTypes.STOP_RELOADING_GRAPHS:
+	      if (state.graphReloaderInterval) {
+	        console.log('stopping graph reloader interval', state.graphReloaderInterval);
+	        window.clearInterval(state.graphReloaderInterval);
+	      }
 	      return Object.assign({}, state, {
 	        autoUpdateInterval: 0,
 	        graphReloaderInterval: initialAppState.graphReloaderInterval

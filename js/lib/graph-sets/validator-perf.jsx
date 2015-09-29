@@ -19,6 +19,10 @@ export default class ValidatorPerf extends Component {
       <GraphHolder>
         <Graph title={gettext("Add-on Validation Times")}
           getUrl={graphite.addonValidationTimesUrl} graphProps={graphProps} />
+        <Graph title={gettext("Add-on Validation Count")}
+          getUrl={graphite.addonValidationCountUrl} graphProps={graphProps} />
+        <Graph title={gettext("Unlisted Auto-signable Validation Count")}
+          getUrl={graphite.autoSignableAddonCountUrl} graphProps={graphProps} />
       </GraphHolder>
     );
   }

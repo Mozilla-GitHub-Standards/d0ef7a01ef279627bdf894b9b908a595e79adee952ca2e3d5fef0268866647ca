@@ -23,6 +23,7 @@ export class App extends Component {
 
   constructor(props) {
     super(props);
+    this._isMounted = true;
     this.boundAppActions = bindActionCreators(appActions, props.dispatch);
 
     if (props.app.autoUpdateInterval) {
@@ -34,6 +35,10 @@ export class App extends Component {
     window.onresize = debounce(this.setPanelSize, 300);
 
     addVisibilityHandler(isVisible => {
+      if (!this._isMounted) {
+        console.log('App component is not mounted');
+        return;
+      }
       if (this.props.app.autoUpdateInterval) {
         if (isVisible) {
           this.boundAppActions.reloadGraphImages();  // initial reload
@@ -43,6 +48,12 @@ export class App extends Component {
         }
       }
     });
+  }
+
+  componentWillUnmount() {
+    console.log('App component unmounted');
+    this.boundAppActions.stopReloadingGraphs();
+    this._isMounted = false;
   }
 
   setPanelSize = () => {
@@ -120,6 +131,11 @@ export class App extends Component {
             {...this.boundAppActions}
           />
           <GraphSet graphProps={graphProps} />
+          <footer>
+            <a href="https://github.com/mozilla/amo-dashboard" target="_blank">
+              {gettext('Source code for this app')}
+            </a>
+          </footer>
         </div>
       );
     }

@@ -167,6 +167,30 @@ export function addonValidationTimesUrl({...params} = {}) {
 }
 
 
+export function addonValidationCountUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: [
+      'alias(summarize(stats_counts.addons.devhub.validator.results.all.success, "1day", "max", true), "All successes")',
+      'alias(summarize(stats_counts.addons.devhub.validator.results.all.failure, "1day", "max", true), "All failures")',
+    ],
+    ...params,
+  });
+}
+
+
+export function autoSignableAddonCountUrl({...params} = {}) {
+  return url({
+    vtitle: 'count',
+    target: [
+      'alias(summarize(stats_counts.addons.devhub.validator.results.unlisted.is_signable, "1day", "max", true), "Auto-signable")',
+      'alias(summarize(stats_counts.addons.devhub.validator.results.unlisted.is_not_signable, "1day", "max", true), "Not auto-signable")',
+    ],
+    ...params,
+  });
+}
+
+
 export function addonGUIDSearchTimeUrl({...params} = {}) {
   return url({
     vtitle: 'milleseconds',
@@ -196,18 +220,14 @@ export function addonGUIDSearchCountUrl({...params} = {}) {
 
 function addonStatusChangeTargets(statType) {
   var targets = [
-    'sumSeries(stats.addons.addon_status_change.{statType}.*)',
     // Legend: github.com/mozilla/olympia/.../apps/constants/base.py
-    'stats.addons.addon_status_change.{statType}.status_0',
-    'stats.addons.addon_status_change.{statType}.status_1',
-    'stats.addons.addon_status_change.{statType}.status_2',
-    'stats.addons.addon_status_change.{statType}.status_3',
-    'stats.addons.addon_status_change.{statType}.status_4',
-    'stats.addons.addon_status_change.{statType}.status_7',
-    'stats.addons.addon_status_change.{statType}.status_8',
-    'stats.addons.addon_status_change.{statType}.status_9',
-    'stats.addons.addon_status_change.{statType}.status_12',
-    'stats.addons.addon_status_change.{statType}.status_14',
+    'alias(stats_counts.addons.addon_status_change.{statType}.status_0, "Incomplete")',
+    'alias(stats_counts.addons.addon_status_change.{statType}.status_1, "Unreviewed")',
+    'alias(stats_counts.addons.addon_status_change.{statType}.status_2, "Pending review")',
+    'alias(stats_counts.addons.addon_status_change.{statType}.status_3, "Pending full review")',
+    'alias(stats_counts.addons.addon_status_change.{statType}.status_4, "Public")',
+    'alias(stats_counts.addons.addon_status_change.{statType}.status_8, "Prelim. reviewed")',
+    'alias(stats_counts.addons.addon_status_change.{statType}.status_12, "Rejected")',
   ];
   return targets.map(t => t.replace('{statType}', statType));
 }
@@ -218,5 +238,5 @@ function addonStatusChangeTargets(statType) {
  * site is deployed.
  */
 function deployMarker() {
-  return 'drawAsInfinite(stats.timers.addons.update.count)';
+  return 'alias(drawAsInfinite(stats.timers.addons.update.count), "Site deployment")';
 }
