@@ -131,6 +131,11 @@ export class App extends Component {
             {...this.boundAppActions}
           />
           <GraphSet graphProps={graphProps} />
+          <footer>
+            <a href="https://github.com/mozilla/amo-dashboard" target="_blank">
+              {gettext('Source code for this app')}
+            </a>
+          </footer>
         </div>
       );
     }

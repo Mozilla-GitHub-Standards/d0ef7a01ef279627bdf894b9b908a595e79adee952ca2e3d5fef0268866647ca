@@ -11,6 +11,12 @@ main {
     width: 100%;
 }
 
+footer {
+    clear: both;
+    padding: 5em 2em 2em 2em;
+    text-align: center;
+}
+
 hr {
     border: 1px solid $heading-border;
     border-bottom: none;
