@@ -3,6 +3,7 @@ import { gettext } from 'lib/utils';
 // Time slices, as understood by Graphite on the query string.
 export const LAST_15_MIN = '-15minutes';
 export const LAST_HOUR = '-1hours';
+export const LAST_6_HOURS = '-6hours';
 export const LAST_24_HOURS = '-24hours';
 export const LAST_WEEK = '-7days';
 export const LAST_30_DAYS = '-30days';
@@ -11,6 +12,7 @@ export const LAST_90_DAYS = '-90days';
 export var timeSliceTitles = {};
 timeSliceTitles[LAST_15_MIN] = gettext('15 Min Ago');
 timeSliceTitles[LAST_HOUR] = gettext('Last Hr');
+timeSliceTitles[LAST_6_HOURS] = gettext('6 Hr Ago');
 timeSliceTitles[LAST_24_HOURS] = gettext('24 Hr Ago');
 timeSliceTitles[LAST_WEEK] = gettext('Last Week');
 timeSliceTitles[LAST_30_DAYS] = gettext('Last 30 Days');
@@ -56,6 +58,7 @@ export function responseCountUrl({...params} = {}) {
       'stats.addons.response.404',
       'stats.addons.response.405',
       'stats.addons.response.500',
+      deployMarker(),
     ],
     ...params,
   });
@@ -161,6 +164,7 @@ export function addonValidationTimesUrl({...params} = {}) {
       'stats.timers.addons.devhub.validator.lower',
       'stats.timers.addons.devhub.validator.mean',
       'stats.timers.addons.devhub.validator.upper_90',
+      deployMarker(),
     ],
     ...params,
   });
@@ -212,6 +216,7 @@ export function addonGUIDSearchCountUrl({...params} = {}) {
     vtitle: 'count',
     target: [
       'scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)',
+      deployMarker(),
     ],
     ...params,
   });

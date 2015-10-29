@@ -23689,6 +23689,8 @@
 	exports.LAST_15_MIN = LAST_15_MIN;
 	var LAST_HOUR = '-1hours';
 	exports.LAST_HOUR = LAST_HOUR;
+	var LAST_6_HOURS = '-6hours';
+	exports.LAST_6_HOURS = LAST_6_HOURS;
 	var LAST_24_HOURS = '-24hours';
 	exports.LAST_24_HOURS = LAST_24_HOURS;
 	var LAST_WEEK = '-7days';
@@ -23702,6 +23704,7 @@
 	exports.timeSliceTitles = timeSliceTitles;
 	timeSliceTitles[LAST_15_MIN] = (0, _libUtils.gettext)('15 Min Ago');
 	timeSliceTitles[LAST_HOUR] = (0, _libUtils.gettext)('Last Hr');
+	timeSliceTitles[LAST_6_HOURS] = (0, _libUtils.gettext)('6 Hr Ago');
 	timeSliceTitles[LAST_24_HOURS] = (0, _libUtils.gettext)('24 Hr Ago');
 	timeSliceTitles[LAST_WEEK] = (0, _libUtils.gettext)('Last Week');
 	timeSliceTitles[LAST_30_DAYS] = (0, _libUtils.gettext)('Last 30 Days');
@@ -23738,7 +23741,7 @@
 	
 	  return url(_extends({
 	    vtitle: 'count',
-	    target: ['sumSeries(stats.addons.response.*)', 'stats.addons.response.200', 'stats.addons.response.301', 'stats.addons.response.302', 'stats.addons.response.403', 'stats.addons.response.404', 'stats.addons.response.405', 'stats.addons.response.500']
+	    target: ['sumSeries(stats.addons.response.*)', 'stats.addons.response.200', 'stats.addons.response.301', 'stats.addons.response.302', 'stats.addons.response.403', 'stats.addons.response.404', 'stats.addons.response.405', 'stats.addons.response.500', deployMarker()]
 	  }, params));
 	}
 	
@@ -23826,7 +23829,7 @@
 	
 	  return url(_extends({
 	    vtitle: 'milleseconds',
-	    target: ['stats.timers.addons.devhub.validator.lower', 'stats.timers.addons.devhub.validator.mean', 'stats.timers.addons.devhub.validator.upper_90']
+	    target: ['stats.timers.addons.devhub.validator.lower', 'stats.timers.addons.devhub.validator.mean', 'stats.timers.addons.devhub.validator.upper_90', deployMarker()]
 	  }, params));
 	}
 	
@@ -23871,7 +23874,7 @@
 	  // Is this graph really a count? Hmmm. It's from the old dashboard.
 	  return url(_extends({
 	    vtitle: 'count',
-	    target: ['scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)']
+	    target: ['scale(stats.timers.addons.view.api.views.guid_search.GET.count,0.1)', deployMarker()]
 	  }, params));
 	}
 	
