@@ -39,7 +39,7 @@ export default class Navigation extends Component {
       <select key="graph-set" value={this.props.currentGraphSet}
           onChange={this.onChangeGraphSet}>
         {graphSetList.map(set =>
-          <option value={set.key}>{set.name}</option>
+          <option key={set.key} value={set.key}>{set.name}</option>
         )}
       </select>
     );
@@ -59,14 +59,14 @@ export default class Navigation extends Component {
     });
 
     menu.push(
-        <label>
-          <input
-            checked={this.props.autoUpdateInterval > 0}
-            type="checkbox"
-            onChange={this.onAutoUpdateChange}
-          />
-          {gettext('Auto-update')}
-        </label>
+      <label key="auto-update">
+        <input
+          checked={this.props.autoUpdateInterval > 0}
+          type="checkbox"
+          onChange={this.onAutoUpdateChange}
+        />
+        {gettext('Auto-update')}
+      </label>
     );
     return menu;
   }
