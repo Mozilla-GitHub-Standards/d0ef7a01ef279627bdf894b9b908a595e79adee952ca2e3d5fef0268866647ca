@@ -1,11 +1,12 @@
 import React from 'react';
+import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import App from 'lib/components/app';
 import dataStore from 'lib/data-store';
 
-React.render((
+render((
   <Provider store={dataStore}>
-    {() =>  <App/>}
+    <App/>
   </Provider>
 ), document.getElementById('app'));
