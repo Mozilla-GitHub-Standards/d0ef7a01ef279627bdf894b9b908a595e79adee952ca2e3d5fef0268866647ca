@@ -1,5 +1,8 @@
 # AMO Dashboard
 
+**UPDATE**: This dashboard is no longer maintained; we're using
+[Data Dog](https://app.datadoghq.com/dash/78168/addons-prod) now.
+
 This is a private Mozilla dashboard to view health and performance stats for
 [addons.mozilla.org](http://addons.mozilla.org). The stats are collected with
 [statsd](https://github.com/etsy/statsd) and the graphs are provided by
